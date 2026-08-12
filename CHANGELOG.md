@@ -1,5 +1,11 @@
 # 小游戏品牌概念工坊 · 版本记录
 
+## v2.3.1 — 修复「点生成 loading 被旧图秒铺回」（2026-08-12）
+- 修复 bug：点「生成」/「导出 job.json」后，画布本该进入循环 loading 等真图，却被上一套 freerun/套图（如 simjinx）瞬间铺回，loading 一闪就没了。
+- 根因：`startPolling` 降级读静态 `outputs/manifest.json` 时，把「出图前就躺在 outputs/ 里的旧图」误判成本批新图，一 tick 就 applyFilled 覆盖了 loading。
+- 修法：点生成时记录「出图前」manifest.cells 指纹 `__PREGEN_SIG__` 并置 `__GEN_ACTIVE__=true`；轮询时只要静态 manifest 内容仍等于出图前指纹（或为空），一律忽略、保持 loading；只有内容真正变化（后台写入本批新图）才解除标记、逐张点亮。
+- 效果：纯静态线上点生成 = loading 一直循环，直到 agent 后台出新图更新 manifest/freerun 才点亮，符合「缓解等待焦虑」诉求。
+
 ## v2.3 — 自由出图展示 + json 自带参考图（2026-08-12）
 - 新增「自由出图（不套技能）」结果展示：启动时若存在 `outputs/freerun.json`，直接把这套图铺进画布、右栏用它的真分析（配色/关键词/世界观）。技能 snapshot 依旧物理隔离，freerun 独立不串色。
 - 首套自由出图 = 金克丝，锚点用用户上传的真金克丝角色设定图（紫麻花辫/鲨鱼火箭筒/涂鸦街头风），nano pro 图生图 input_fidelity=high，竖版 9:16，角色一致性极高。

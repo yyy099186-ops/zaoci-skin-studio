@@ -323,7 +323,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
-      <span class="ver-badge" id="ver-badge" title="当前版本">v2.3</span>
+      <span class="ver-badge" id="ver-badge" title="当前版本">v2.3.1</span>
       <a class="guide-link" href="guide" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
@@ -803,9 +803,16 @@ async function generate(){
   const ctx=ctx0;
   document.getElementById('btn-gen').disabled=true;
   LB_ITEMS=[];
-  // 点生成=开启一次全新出图：清掉上一套残留的 outputs（含技能 snapshot 样图），
+  // 点生成=开启一次全新出图：清掉上一套残留的 outputs（含技能 snapshot 样图 / 上一套 freerun），
   // 否则裸风格/换套时会误命中旧图铺预览，而不是进 loading 态等真图回填。
-  window.__OUTPUTS__=null; window.__MANIFEST__=null;
+  window.__OUTPUTS__=null; window.__MANIFEST__=null; window.__ANALYSIS__=null;
+  // 本批出图进行中：记录「出图前」outputs 目录里已存在的静态图指纹（上一套 freerun/manifest）。
+  // 轮询时只有当 manifest 内容与这份「出图前指纹」不同，才算本批真正回填的新图；
+  // 否则出图前就躺在 outputs/ 的旧图会被轮询当成新图秒铺回来，loading 一闪就没了（这正是 bug 根因）。
+  window.__GEN_ACTIVE__=true;
+  window.__PREGEN_SIG__='';
+  // 指纹只取 manifest.json 的 cells（轮询降级也只比 manifest.json，两边口径必须一致）。
+  try{ const pm=await getJSON('outputs/manifest.json?t='+Date.now()); window.__PREGEN_SIG__=JSON.stringify((pm&&pm.cells)||{}); }catch(e){ window.__PREGEN_SIG__='{}'; }
 
   const job={ style_id:sk.id, style_name:sk.name, model:sk.modelRoute,
     theme:ctx.theme, mascot:ctx.mascot, ratio:ctx.ratio, size:ctx.size,
@@ -950,21 +957,29 @@ async function exportJob(){
 let __POLL__=null;
 function startPolling(){
   if(__POLL__) clearInterval(__POLL__);
-  let seen=JSON.stringify(window.__OUTPUTS__||{});
+  // 出图刚开始时 __OUTPUTS__ 已被清空 → seen 从空开始。
+  let seen='';
   const tick=async()=>{
-    let cells=null;
+    let cells=null; let fromApi=false;
     try{
       const r=await fetch('/api/outputs',{cache:'no-store'});
-      if(r.ok){ const m=await r.json(); cells=(m&&m.cells)||{}; }
+      if(r.ok){ const m=await r.json(); cells=(m&&m.cells)||{}; fromApi=true; }
     }catch(e){}
     if(cells===null){
       // 降级：读静态 manifest（演示：我在后台每出一张就更新 manifest.cells）
-      try{ const m=await getJSON('outputs/manifest.json?t='+Date.now()); cells=(m&&m.cells)||{}; window.__MANIFEST__=m||window.__MANIFEST__; }
+      try{ const m=await getJSON('outputs/manifest.json?t='+Date.now()); cells=(m&&m.cells)||{}; }
       catch(e){ return; }
     }
     const now=JSON.stringify(cells);
-    if(now!==seen){
-      seen=now; window.__OUTPUTS__=cells;
+    // ★关键护栏：本批出图进行中时，若静态 manifest 内容 == 出图前指纹（即还是上一套旧图，
+    //   后台还没写入本批新图），一律忽略，保持 loading。避免旧 freerun/套图被当成本批新图秒铺回来。
+    if(window.__GEN_ACTIVE__ && !fromApi){
+      if(now===window.__PREGEN_SIG__ || now==='{}' || now===JSON.stringify({})){ return; }
+      // 内容变了 → 本批真新图已写入，解除进行中标记，允许后续正常点亮
+      window.__GEN_ACTIVE__=false;
+    }
+    if(now!==seen && now!=='{}'){
+      seen=now; window.__OUTPUTS__=cells; window.__MANIFEST__=(window.__MANIFEST__||{}); window.__MANIFEST__.cells=cells;
       applyFilled(cells);        // fillSig diff → 只点亮新到的格，逐张亮
       // 顺带刷新右栏真分析（analysis.json 若已更新）
       try{ const a=await getJSON('outputs/analysis.json?t='+Date.now()); if(a){window.__ANALYSIS__=a;} }catch(e){}
