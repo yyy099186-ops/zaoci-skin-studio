@@ -699,9 +699,11 @@ function paintPaletteCell(sk){
 function paintComponentsCell(sk){
   const el=document.getElementById('cell-components'); if(!el)return;
   // 若 agent 已回填组件真图，优先显示真图
-  const filled=(window.__OUTPUTS__&&window.__OUTPUTS__.components);
+  const rawC=(window.__OUTPUTS__&&window.__OUTPUTS__.components);
+  const fc=rawC?normFill(rawC):null;
+  const filled=fc?(fc.single||fc.nano||fc.gpt):null;
   if(filled){
-    const src=/^https?:|^outputs\//.test(filled)?filled:'outputs/'+filled;
+    const src=/^https?:|^outputs\//.test(filled)||filled.includes('/')?filled:'outputs/'+filled;
     el.classList.add('clickable');
     el.innerHTML=`<span class="cell-sub">DESIGN DNA</span><img src="${src}" alt="UI 组件">
       <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 9px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;font-weight:600">UI 组件 · 真图</div>`;
