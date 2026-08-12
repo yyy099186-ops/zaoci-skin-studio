@@ -9,5 +9,7 @@ outputs/_*.png
 node_modules/
 .vercel
 _outputs_jinx_backup/
+_outputs_diruiji_backup/
+outputs/_analysis_diruiji_backup.json
 refs/
 outputs/hero.png

@@ -272,9 +272,19 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .lb{position:fixed;inset:0;z-index:200;background:rgba(4,8,14,.92);display:none;
   align-items:center;justify-content:center;flex-direction:column;padding:32px;backdrop-filter:blur(6px)}
 .lb.show{display:flex}
-.lb .stage{position:relative;max-width:min(1100px,92vw);max-height:76vh;display:flex;align-items:center;justify-content:center}
-.lb .stage img{max-width:100%;max-height:76vh;object-fit:contain;border-radius:10px;
+.lb .stage{position:relative;max-width:min(1280px,94vw);max-height:78vh;display:flex;align-items:center;justify-content:center}
+/* 单图：横版直接铺满(contain) */
+#lb-stageimg.single{display:flex;align-items:center;justify-content:center;max-height:78vh}
+#lb-stageimg.single figure{margin:0;display:flex;align-items:center;justify-content:center}
+#lb-stageimg.single img{max-width:min(1280px,94vw);max-height:78vh;object-fit:contain;border-radius:10px;
   border:1px solid var(--shell-line-strong);box-shadow:0 20px 60px rgba(0,0,0,.6)}
+/* 对比：上下两张横版图，各自完整铺满，不左右硬裁 */
+#lb-stageimg.compare{display:flex;flex-direction:column;gap:12px;max-height:78vh;overflow:hidden}
+#lb-stageimg.compare figure{margin:0;position:relative;display:flex;align-items:center;justify-content:center;min-height:0}
+#lb-stageimg.compare img{max-width:min(1280px,94vw);max-height:36vh;object-fit:contain;border-radius:9px;
+  border:1px solid var(--shell-line-strong);box-shadow:0 12px 36px rgba(0,0,0,.55)}
+#lb-stageimg.compare figcaption{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;letter-spacing:.5px;
+  padding:3px 10px;border-radius:99px;background:rgba(61,232,74,.85);color:#04140a}
 .lb .lb-title{position:absolute;top:-30px;left:0;font-size:13px;color:#fff;font-weight:600;display:flex;gap:9px;align-items:center}
 .lb .lb-title .rt{font-size:9px;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.12);color:#cfe}
 .lb .nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
@@ -298,6 +308,8 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .lb .dots{margin-top:12px;display:flex;gap:6px}
 .lb .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:.15s}
 .lb .dots i.on{background:var(--cta);width:18px;border-radius:99px}
+.ver-badge{margin-left:8px;font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:99px;
+  background:linear-gradient(135deg,#3DE84A,#1fae4f);color:#04140a;box-shadow:0 2px 8px rgba(61,232,74,.35);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -308,6 +320,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
+      <span class="ver-badge" id="ver-badge" title="当前版本">v2.0</span>
       <a class="guide-link" href="guide" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
@@ -368,6 +381,14 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       </div>
     </div>
 
+    <div class="group">
+      <div class="label">出图模型</div>
+      <div class="seg" id="seg-model">
+        <button data-v="nano">nano pro</button><button data-v="gpt">image2</button><button class="on" data-v="compare">对比输出</button>
+      </div>
+      <div class="sub" style="margin-top:5px">nano pro 像素更干净 · image2 更稳 · 对比输出=同格左右各出一张</div>
+    </div>
+
     <button class="btn-gen" id="btn-gen" disabled>生 成</button>
     <button class="btn-gen" id="btn-export" style="display:none;margin-top:8px;background:linear-gradient(135deg,#1e3a24,#16261a);color:#c9ffdd;box-shadow:none">导出任务 job.json</button>
     <a class="selfrun" href="game_brand_concept_studio_mikoyuan.zip" download>
@@ -413,7 +434,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <div class="stage">
     <div class="lb-title"><span id="lb-name"></span><span class="rt" id="lb-route"></span></div>
     <button class="nav prev" id="lb-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-    <img id="lb-img" src="" alt="">
+    <div id="lb-stageimg" class="single"></div>
     <button class="nav next" id="lb-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
   </div>
   <div class="lb-prompt">
@@ -561,7 +582,7 @@ function selectSkill(id){
   r.setProperty('--sk-bg',sk.skin.bg); r.setProperty('--sk-primary',sk.skin.primary);
   r.setProperty('--sk-accent',sk.skin.accent); r.setProperty('--sk-text',sk.skin.text);
   document.getElementById('active-style-chip').textContent=sk.name;
-  document.getElementById('model-chip').textContent='模型路由 · '+(sk.modelRoute.includes('nano')?'nano pro':'gpt-image-2');
+  syncModelChip();
   document.getElementById('btn-gen').disabled=false;
   resetGrid(sk);
   renderHero(sk);
@@ -570,7 +591,7 @@ function selectSkill(id){
 function deselectSkill(){
   activeId=null; renderSkillList();
   document.getElementById('active-style-chip').textContent='未选择风格（仅凭参考图）';
-  document.getElementById('model-chip').textContent='模型路由 · gpt-image-2';
+  syncModelChip();
   document.getElementById('hero-group').style.display='none';
   buildEmptyGrid();
   // 未选技能时，配色/组件格仍用 agent 真数据渲染（若有），不留空白
@@ -795,35 +816,58 @@ async function generate(){
     const c=imgCells[i]; await sleep(360+Math.random()*380);
     const el=document.getElementById('cell-'+c.id);
     const prompt=buildPrompt(sk,c.id,ctx);
-    // 方案A 模型对比：每格出两张（nano pro / gpt-image-2），期望产物 {cell}_nano.png / {cell}_gpt.png
+    // 出图模型：nano=仅nano pro / gpt=仅image2 / compare=同格双图对比
+    const om=ctx.outModel||'compare';
+    const variants = om==='nano' ? [{model:'nano pro', out:c.id+'_nano.png'}]
+                   : om==='gpt'  ? [{model:'gpt-image-2', out:c.id+'_gpt.png'}]
+                   : [ {model:'nano pro', out:c.id+'_nano.png'},
+                       {model:'gpt-image-2', out:c.id+'_gpt.png'} ];
     job.cells.push({cell:c.id, label:c.label, prompt:prompt.positive, negative:prompt.negative,
-      aspect:prompt.aspect, compare:true,
-      variants:[
-        {model:'nano pro',     out:c.id+'_nano.png'},
-        {model:'gpt-image-2',  out:c.id+'_gpt.png'}
-      ]});
+      aspect:prompt.aspect, compare:(om==='compare'), variants});
 
-    // 出图结果来源：① agent 已回填 outputs/ ② 技能样本图 ③ 无 → 保持 loading 等真图逐张点亮
+    // 出图结果来源：① agent 已回填 outputs/ 才铺真图；否则一律保持 loading 等真出图逐张点亮。
+    // （不再用技能预设样图占位，避免误以为"已出图"）
     const filled = (window.__OUTPUTS__&&window.__OUTPUTS__[c.id]);
-    const sample = sk.resolveSample(c.id);
-    const src = filled || sample;
+    const src = filled;
     if(src){
       el.classList.remove('loading'); el.classList.add('clickable','reveal');
       el.dataset.fillSig=JSON.stringify(src);
       el.innerHTML=cellFillHTML(c,src,!!filled);
       const f=normFill(src); const primary=f.single||f.nano||f.gpt||'';
-      LB_ITEMS.push({cellId:c.id,label:c.label,src:primary,prompt:prompt.positive,route:prompt.model});
+      LB_ITEMS.push({cellId:c.id,label:c.label,src:primary,
+        nano:f.nano||'', gpt:f.gpt||'', prompt:prompt.positive,route:prompt.model});
       el.onclick=()=>openLB(c.id);
     }
     // 无真图 / 无样图：保持渐变 loading 态，等 agent 出图后轮询逐张点亮
   }
   window.__LAST_JOB__=job;
   document.getElementById('btn-export').style.display='block';
-  // 点生成后即开始轮询 outputs：我在后台每出一张图就写进 outputs/ + 更新 manifest，
-  // 前端逐张点亮，无需手动刷新。
+  // 点生成后：若检测到本地后端(/api/save-job)，自动把任务落盘交 agent，无需再点第二个按钮。
+  // 无后端(纯静态/线上)则保留手动「导出 job.json」入口。
+  autoSubmitJob();
+  // 点生成后即开始轮询 outputs：agent 每出一张图就写进 outputs/ + 更新 manifest，前端逐张点亮，无需手动刷新。
   startPolling();
   await runAgentAnalysis(sk,ctx);
   document.getElementById('btn-gen').disabled=false;
+}
+
+/* 点生成后自动落盘（有后端时）：静默 POST /api/save-job，让 agent 立即读到本次任务。 */
+async function autoSubmitJob(){
+  if(!window.__LAST_JOB__) return;
+  try{
+    const r=await fetch('/api/save-job',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(window.__LAST_JOB__)});
+    if(r.ok){
+      const j=await r.json();
+      if(j&&j.ok){
+        const btn=document.getElementById('btn-export');
+        if(btn){ btn.textContent='任务已就位 · 等待回填中…'; }
+        toast('任务已交给 agent · 出图后自动逐张点亮，无需刷新',true);
+        return true;
+      }
+    }
+  }catch(e){ /* 无后端：保留手动导出按钮，用户可点它下载 job.json */ }
+  return false;
 }
 
 /* 交三谦出图：优先直存后端（本地工作台模式），无后端则降级为下载 job.json */
@@ -932,9 +976,11 @@ function applyFilled(cells){
     const prompt=buildPrompt(sk,cid,collectCtx());
     el.classList.remove('loading'); el.classList.add('clickable','reveal');
     el.innerHTML=cellFillHTML(c,cells[cid],true);
-    const f=normFill(cells[cid]); const primary=f.single||f.nano||f.gpt||'';
+    const f=normFill(cells[cid]); const primary=f.single||f.nano||f.gpt||''; const bust='?t='+Date.now();
     const exist=LB_ITEMS.findIndex(x=>x.cellId===cid);
-    const item={cellId:cid,label:c.label,src:primary+'?t='+Date.now(),prompt:prompt.positive,route:prompt.model};
+    const item={cellId:cid,label:c.label,src:primary+bust,
+      nano:f.nano?f.nano+bust:'', gpt:f.gpt?f.gpt+bust:'',
+      prompt:prompt.positive,route:prompt.model};
     if(exist>=0) LB_ITEMS[exist]=item; else LB_ITEMS.push(item);
     el.onclick=()=>openLB(cid);
     setTimeout(()=>el.classList.remove('reveal'),450);
@@ -949,9 +995,21 @@ function openLB(cellId){
 }
 function renderLB(){
   const it=LB_ITEMS[lbIndex]; if(!it)return;
-  document.getElementById('lb-img').src=it.src;
+  const stage=document.getElementById('lb-stageimg');
+  const isCompare = it.nano && it.gpt;
+  if(isCompare){
+    // 对比：上下两张横版图，各自完整铺满(contain)，不再左右硬裁
+    stage.className='compare';
+    stage.innerHTML=
+      `<figure><img src="${it.nano}" alt="nano pro"><figcaption>nano pro</figcaption></figure>`+
+      `<figure><img src="${it.gpt}" alt="gpt-image-2"><figcaption>gpt-image-2</figcaption></figure>`;
+    document.getElementById('lb-route').textContent='对比 nano×image2';
+  }else{
+    stage.className='single';
+    stage.innerHTML=`<figure><img src="${it.src}" alt=""></figure>`;
+    document.getElementById('lb-route').textContent=it.route.includes('nano')?'nano pro':'gpt-image-2';
+  }
   document.getElementById('lb-name').textContent=it.label;
-  document.getElementById('lb-route').textContent=it.route.includes('nano')?'nano pro':'gpt-image-2';
   document.getElementById('lb-prompt-text').textContent=it.prompt;
   const dots=document.getElementById('lb-dots'); dots.innerHTML='';
   LB_ITEMS.forEach((_,i)=>{const d=document.createElement('i');if(i===lbIndex)d.className='on';d.onclick=()=>{lbIndex=i;renderLB();};dots.appendChild(d);});
@@ -1143,6 +1201,7 @@ function collectCtx(){
     mascot:document.getElementById('mascot').value.trim(),
     ratio:document.querySelector('#seg-ratio .on').dataset.v,
     size:document.querySelector('#seg-size .on').dataset.v,
+    outModel:(document.querySelector('#seg-model .on')||{dataset:{v:'compare'}}).dataset.v,
     refCount:R.ref.length, aesCount:R.aes.length, uiCount:R.ui.length,
     hasCharRef:R.ref.length>0,
     // 三类参考图各司其职（供 agent 真分析时知道每类图的用途）
@@ -1187,11 +1246,18 @@ function bindDrop(dropId,thumbId,slot){
 }
 
 /* segmented */
-document.querySelectorAll('.seg').forEach(seg=>seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');}));
+document.querySelectorAll('.seg').forEach(seg=>seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');if(seg.id==='seg-model')syncModelChip();}));
+/* 顶部 model-chip 跟随出图模型选择器 */
+function syncModelChip(){
+  const v=(document.querySelector('#seg-model .on')||{dataset:{v:'compare'}}).dataset.v;
+  const txt=v==='nano'?'出图模型 · nano pro':v==='gpt'?'出图模型 · image2':'出图模型 · nano pro ⇄ image2 对比';
+  const chip=document.getElementById('model-chip'); if(chip)chip.textContent=txt;
+}
 
 /* init */
 bindDrop('drop-ref','thumbs-ref','ref'); bindDrop('drop-aes','thumbs-aes','aes'); bindDrop('drop-ui','thumbs-ui','ui');
 buildEmptyGrid();
+syncModelChip();
 document.getElementById('btn-gen').onclick=generate;
 document.getElementById('btn-export').onclick=exportJob;
 document.getElementById('skill-upload').onclick=()=>document.getElementById('skill-file').click();
