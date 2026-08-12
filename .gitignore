@@ -5,6 +5,7 @@ _*.py
 _*.js
 _unused/
 jobs/*.json
+jobs/_archive/
 outputs/_*.png
 node_modules/
 .vercel
