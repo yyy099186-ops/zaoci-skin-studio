@@ -156,16 +156,36 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .cell .palette-render .bar{flex:1}
 .cell .comp-render{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:16px}
 
-/* 生成态 */
-.cell.loading::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
-  animation:shimmer 1.3s infinite}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+/* 生成态：绿系流动渐变骨架屏 */
+.cell.loading{background:#0e1712}
+.cell.loading::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(115deg,#0e1712 0%,#123a20 25%,#1c6f38 45%,#3DE84A55 50%,#1c6f38 55%,#123a20 75%,#0e1712 100%);
+  background-size:280% 100%;animation:flow 1.8s ease-in-out infinite}
+@keyframes flow{0%{background-position:130% 0}100%{background-position:-130% 0}}
+.cell.loading .load-core{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:9px}
+.cell.loading .load-core .pulse{width:12px;height:12px;border-radius:50%;background:var(--cta);
+  box-shadow:0 0 0 0 rgba(61,232,74,.6);animation:pulse 1.3s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,232,74,.55)}70%{box-shadow:0 0 0 14px rgba(61,232,74,0)}100%{box-shadow:0 0 0 0 rgba(61,232,74,0)}}
+.cell.loading .load-core .ltxt{font-size:10px;color:#bfffcf;font-weight:600;letter-spacing:1px;text-shadow:0 1px 4px #000}
 .cell .spin{width:26px;height:26px;border:2.5px solid var(--shell-line-strong);
   border-top-color:var(--cta);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .cell.reveal{animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes pop{0%{transform:scale(.94);opacity:0}100%{transform:scale(1);opacity:1}}
+/* 图加载失败兜底占位（绝不露裂图） */
+.cell .img-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;background:#12100f;color:var(--shell-txt-mute);z-index:1}
+.cell .img-fallback svg{width:22px;height:22px;opacity:.5}
+.cell .img-fallback .fbt{font-size:9px}
+/* 模型对比：同格左右分屏 */
+.cell .vs{position:absolute;inset:0;display:flex;z-index:1}
+.cell .vs .half{position:relative;flex:1;overflow:hidden}
+.cell .vs .half img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cell .vs .half+.half{border-left:1.5px solid rgba(61,232,74,.7)}
+.cell .vs .half .mtag{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+  font-size:8px;font-weight:700;padding:2px 7px;border-radius:5px;white-space:nowrap;
+  background:rgba(0,0,0,.6);color:#bfffcf;z-index:2}
 
 /* 右侧翻页控制条 */
 .pager{display:flex;flex-direction:column;gap:8px;padding-top:60px}
@@ -187,6 +207,12 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .dna-block .bt.open{border-color:var(--cta);border-bottom-left-radius:0;border-bottom-right-radius:0}
 .dna-block .bt .dot{width:6px;height:6px;border-radius:50%;background:var(--shell-txt-mute)}
 .dna-block .bt.filled .dot{background:var(--cta);box-shadow:0 0 6px var(--cta)}
+.dna-block .bt .bt-actions{display:flex;align-items:center;gap:5px}
+.dna-block .bt .bt-btn{font-size:9px;font-weight:600;padding:3px 7px;border-radius:6px;
+  background:rgba(61,232,74,.08);border:1px solid rgba(61,232,74,.35);color:#8affab;
+  cursor:pointer;transition:.15s;white-space:nowrap;line-height:1.3}
+.dna-block .bt .bt-btn:hover{background:rgba(61,232,74,.2);border-color:var(--cta);color:#fff}
+.dna-block .bt .bt-btn.ok{background:var(--cta);color:#04120a;border-color:var(--cta)}
 .dna-block .body{font-size:11px;line-height:1.7;color:var(--shell-txt-dim);
   border:1px solid var(--cta);border-top:none;border-radius:0 0 9px 9px;padding:0 11px;
   max-height:0;overflow:hidden;transition:max-height .3s,padding .3s}
@@ -286,9 +312,9 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#3DE84A">①</span> 配色 & 品牌 DNA 参考</div>
-      <div class="sub">从这张提取配色 + 品牌 DNA</div>
-      <div class="drop" id="drop-ref"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="17" cy="14" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20c4 0 6 2.5 6 5 0 3-3 3-3 5s2 2 2 4-2.5 6-5 6z"/></svg></div><div class="t">拖放 / 点击添加</div><div class="h">配色系统与品牌调性从这里来</div><div class="thumbs" id="thumbs-ref"></div></div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">①</span> 角色 & DNA 参考</div>
+      <div class="sub">从这张提取角色 + 配色 + 品牌 DNA</div>
+      <div class="drop" id="drop-ref"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="17" cy="14" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20c4 0 6 2.5 6 5 0 3-3 3-3 5s2 2 2 4-2.5 6-5 6z"/></svg></div><div class="t">拖放 / 点击添加</div><div class="h">主角、配色与品牌调性从这里来</div><div class="thumbs" id="thumbs-ref"></div></div>
     </div>
 
     <div class="group">
@@ -303,10 +329,10 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <div class="drop small" id="drop-ui"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="t">拖放 / 点击添加</div><div class="thumbs" id="thumbs-ui"></div></div>
     </div>
 
-    <!-- 风格技能：工具的心脏 -->
+    <!-- 风格技能：非必选 -->
     <div class="group">
-      <div class="label">小游戏风格（风格技能）</div>
-      <div class="sub">选中即套用该技能的视觉皮肤</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">④</span> 风格技能（非必选）</div>
+      <div class="sub">选中套用该风格皮肤占位；不选则画布保持空白，纯凭参考图直出</div>
       <div class="skill-list" id="skill-list"></div>
       <label class="skill-upload" id="skill-upload">+ 上传风格技能包 (.zip)
         <input type="file" accept=".zip" id="skill-file" hidden>
@@ -332,7 +358,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <div class="label">角色比例</div>
       <div class="seg" id="seg-ratio">
         <button data-v="3">3头身</button><button class="on" data-v="5">5头身</button>
-        <button data-v="7">7头身</button><button data-v="9">9头身</button>
+        <button data-v="9">9头身</button><button data-v="orig">原图比例</button>
       </div>
     </div>
     <div class="group">
@@ -667,7 +693,7 @@ function paintComponentsCell(sk){
 /* ---------- Prompt 拼装（出图 / 接三谦） ----------
    6 格中：components 出「资源拆解表」；login/level/battle/result 出关键界面（需角色一致性）。 */
 function ratioLabel(size){ return size==='portrait'?'9:16':'16:9'; }
-function headBody(r){ return r+'-head-tall proportion'; }
+function headBody(r){ return r==='orig' ? 'keep the original character body proportion from the reference image' : (r+'-head-tall proportion'); }
 
 function buildPrompt(sk, cellId, ctx){
   const t = sk.assetTemplates||{};
@@ -757,40 +783,45 @@ async function generate(){
   for(const c of CELLS){
     const el=document.getElementById('cell-'+c.id);
     if(c.kind==='palette'){ paintPaletteCell(sk); continue; }
-    el.classList.remove('clickable'); el.classList.add('loading');
-    el.innerHTML=`<span class="cell-sub">${c.sub}</span><div class="spin"></div>`;
+    el.classList.remove('clickable','reveal'); el.classList.add('loading');
+    el.dataset.fillSig='';
+    el.innerHTML=`<span class="cell-sub">${c.sub}</span>
+      <div class="load-core"><span class="pulse"></span><span class="ltxt">生成中…</span></div>`;
   }
 
   // 逐格：拼 prompt + 占位出图
   const imgCells=CELLS.filter(c=>c.kind==='image');
   for(let i=0;i<imgCells.length;i++){
     const c=imgCells[i]; await sleep(360+Math.random()*380);
-    const el=document.getElementById('cell-'+c.id); el.classList.remove('loading');
+    const el=document.getElementById('cell-'+c.id);
     const prompt=buildPrompt(sk,c.id,ctx);
-    job.cells.push({cell:c.id, label:c.label, prompt:prompt.positive, negative:prompt.negative, model:prompt.model, aspect:prompt.aspect});
+    // 方案A 模型对比：每格出两张（nano pro / gpt-image-2），期望产物 {cell}_nano.png / {cell}_gpt.png
+    job.cells.push({cell:c.id, label:c.label, prompt:prompt.positive, negative:prompt.negative,
+      aspect:prompt.aspect, compare:true,
+      variants:[
+        {model:'nano pro',     out:c.id+'_nano.png'},
+        {model:'gpt-image-2',  out:c.id+'_gpt.png'}
+      ]});
 
-    // 出图结果来源：① agent 已回填 outputs/ ② 技能样本图 ③ 皮肤色占位
+    // 出图结果来源：① agent 已回填 outputs/ ② 技能样本图 ③ 无 → 保持 loading 等真图逐张点亮
     const filled = (window.__OUTPUTS__&&window.__OUTPUTS__[c.id]);
     const sample = sk.resolveSample(c.id);
     const src = filled || sample;
     if(src){
-      el.classList.add('clickable');
-      el.innerHTML=`<span class="cell-sub">${c.sub}</span><img src="${src}" alt="${c.label}">
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 9px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;font-weight:600">${c.label}</div>`;
-      LB_ITEMS.push({cellId:c.id,label:c.label,src,prompt:prompt.positive,route:prompt.model});
+      el.classList.remove('loading'); el.classList.add('clickable','reveal');
+      el.dataset.fillSig=JSON.stringify(src);
+      el.innerHTML=cellFillHTML(c,src,!!filled);
+      const f=normFill(src); const primary=f.single||f.nano||f.gpt||'';
+      LB_ITEMS.push({cellId:c.id,label:c.label,src:primary,prompt:prompt.positive,route:prompt.model});
       el.onclick=()=>openLB(c.id);
-    }else{
-      el.innerHTML=`<span class="cell-sub">${c.sub}</span>
-        <div class="kv" style="background:linear-gradient(160deg,${sk.skin.bg},${shade(sk.skin.primary,-20)})">
-          <div style="font-size:13px;font-weight:800;color:${sk.skin.text};text-shadow:0 2px 6px rgba(0,0,0,.5)">${ctx.theme||sk.name}</div>
-          <div style="font-size:10px;margin-top:6px;color:${sk.skin.accent}">${c.label}</div>
-          <div style="font-size:8px;margin-top:10px;color:${sk.skin.text}99;max-width:82%;line-height:1.5">Prompt 已生成 · 点「导出出图任务」交三谦真出图</div>
-        </div>`;
     }
-    el.classList.add('reveal');
+    // 无真图 / 无样图：保持渐变 loading 态，等 agent 出图后轮询逐张点亮
   }
   window.__LAST_JOB__=job;
   document.getElementById('btn-export').style.display='block';
+  // 点生成后即开始轮询 outputs：我在后台每出一张图就写进 outputs/ + 更新 manifest，
+  // 前端逐张点亮，无需手动刷新。
+  startPolling();
   await runAgentAnalysis(sk,ctx);
   document.getElementById('btn-gen').disabled=false;
 }
@@ -820,41 +851,93 @@ async function exportJob(){
   toast('已下载 job.json · 丢进装了「自跑技能」的 WorkBuddy 即可出图',true);
 }
 
-/* 轮询 outputs：agent 回填后自动把真图贴进对应格 */
+/* 轮询 outputs：agent 回填后自动把真图逐张点亮进对应格。
+   优先走后端 /api/outputs（本地工作台模式），降级读静态 outputs/manifest.json（纯静态演示）。 */
 let __POLL__=null;
 function startPolling(){
   if(__POLL__) clearInterval(__POLL__);
   let seen=JSON.stringify(window.__OUTPUTS__||{});
-  __POLL__=setInterval(async()=>{
+  const tick=async()=>{
+    let cells=null;
     try{
-      const r=await fetch('/api/outputs'); if(!r.ok)return;
-      const m=await r.json(); const cells=(m&&m.cells)||{};
-      const now=JSON.stringify(cells);
-      if(now!==seen){
-        seen=now; window.__OUTPUTS__=cells;
-        applyFilled(cells);
-        toast('检测到新回填的真图，已更新画布',true);
-      }
-    }catch(e){ clearInterval(__POLL__); __POLL__=null; }
-  },4000);
+      const r=await fetch('/api/outputs',{cache:'no-store'});
+      if(r.ok){ const m=await r.json(); cells=(m&&m.cells)||{}; }
+    }catch(e){}
+    if(cells===null){
+      // 降级：读静态 manifest（演示：我在后台每出一张就更新 manifest.cells）
+      try{ const m=await getJSON('outputs/manifest.json?t='+Date.now()); cells=(m&&m.cells)||{}; window.__MANIFEST__=m||window.__MANIFEST__; }
+      catch(e){ return; }
+    }
+    const now=JSON.stringify(cells);
+    if(now!==seen){
+      seen=now; window.__OUTPUTS__=cells;
+      applyFilled(cells);        // fillSig diff → 只点亮新到的格，逐张亮
+      // 顺带刷新右栏真分析（analysis.json 若已更新）
+      try{ const a=await getJSON('outputs/analysis.json?t='+Date.now()); if(a){window.__ANALYSIS__=a;} }catch(e){}
+      toast('检测到新回填的真图，已点亮',true);
+    }
+  };
+  __POLL__=setInterval(tick,2500);
+  tick();
+}
+/* 停止轮询（全部点亮后可调） */
+function stopPolling(){ if(__POLL__){clearInterval(__POLL__);__POLL__=null;} }
+
+/* 图加载失败兜底：把裂图替换成优雅占位，绝不露浏览器裂图图标 */
+function imgFail(img){
+  const wrap=img.closest('.half')||img.parentElement; if(!wrap)return;
+  img.style.display='none';
+  if(wrap.querySelector('.img-fallback'))return;
+  const fb=document.createElement('div'); fb.className='img-fallback';
+  fb.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg><div class="fbt">图未就绪</div>`;
+  wrap.appendChild(fb);
+}
+/* 归一化回填值：可为 "x.png" | {nano,gpt} | {单图}，统一成 {nano,gpt}（缺则用另一个补） */
+function normFill(val){
+  const fix=s=>{ if(!s)return null; return /^https?:|^outputs\//.test(s)?s:'outputs/'+s; };
+  if(typeof val==='string') return {single:fix(val)};
+  if(val&&typeof val==='object'){
+    const n=fix(val.nano||val.nanopro||null), g=fix(val.gpt||val['gpt-image-2']||val.image2||null);
+    if(n||g) return {nano:n,gpt:g};
+    // 兜底：对象里随便有个字符串
+    const any=fix(Object.values(val).find(v=>typeof v==='string')); if(any)return{single:any};
+  }
+  return {};
+}
+/* 统一生成一个出图格的内容 HTML（支持单图 / nano×gpt 分屏对比 + onerror 兜底） */
+function cellFillHTML(c,val,isReal){
+  const f=normFill(val); const bust='?t='+Date.now();
+  const cap=`<div style="position:absolute;bottom:0;left:0;right:0;z-index:3;padding:6px 9px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;font-weight:600">${c.label}${isReal?' · 真图':''}</div>`;
+  const sub=`<span class="cell-sub">${c.sub}</span>`;
+  if(f.single){
+    return `${sub}<img src="${f.single}${bust}" alt="${c.label}" onerror="imgFail(this)">${cap}`;
+  }
+  if(f.nano||f.gpt){
+    const half=(src,tag)=>`<div class="half">${src?`<img src="${src}${bust}" alt="${tag}" onerror="imgFail(this)">`:''}<span class="mtag">${tag}</span>${src?'':'<div class="img-fallback"><div class="fbt">待出图</div></div>'}</div>`;
+    return `${sub}<div class="vs">${half(f.nano,'nano pro')}${half(f.gpt,'gpt-image-2')}</div>${cap}`;
+  }
+  return '';
 }
 
-/* 把 agent 回填的真图贴进对应格 + 刷新 lightbox */
+/* 把 agent 回填的真图贴进对应格 + 刷新 lightbox（支持逐张点亮：只更新有变化的格） */
 function applyFilled(cells){
   const sk=SKILLS.find(s=>s.id===activeId)||bareSkill();
   Object.keys(cells).forEach(cid=>{
     const el=document.getElementById('cell-'+cid); if(!el)return;
     const c=CELLS.find(x=>x.id===cid); if(!c)return;
-    let src=cells[cid];
-    if(src && !/^https?:|^outputs\//.test(src)) src='outputs/'+src;
+    // 逐张点亮：该格已渲染过同一批值就跳过，避免整批闪烁
+    const sig=JSON.stringify(cells[cid]);
+    if(el.dataset.fillSig===sig)return;
+    el.dataset.fillSig=sig;
     const prompt=buildPrompt(sk,cid,collectCtx());
     el.classList.remove('loading'); el.classList.add('clickable','reveal');
-    el.innerHTML=`<span class="cell-sub">${c.sub}</span><img src="${src}?t=${Date.now()}" alt="${c.label}">
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 9px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;font-weight:600">${c.label} · 真图</div>`;
+    el.innerHTML=cellFillHTML(c,cells[cid],true);
+    const f=normFill(cells[cid]); const primary=f.single||f.nano||f.gpt||'';
     const exist=LB_ITEMS.findIndex(x=>x.cellId===cid);
-    const item={cellId:cid,label:c.label,src:src+'?t='+Date.now(),prompt:prompt.positive,route:prompt.model};
+    const item={cellId:cid,label:c.label,src:primary+'?t='+Date.now(),prompt:prompt.positive,route:prompt.model};
     if(exist>=0) LB_ITEMS[exist]=item; else LB_ITEMS.push(item);
     el.onclick=()=>openLB(cid);
+    setTimeout(()=>el.classList.remove('reveal'),450);
   });
 }
 
@@ -893,11 +976,18 @@ async function runAgentAnalysis(sk,ctx){
   blocks.forEach((b)=>{
     const wrap=document.createElement('div'); wrap.className='dna-block';
     wrap.innerHTML=`<div class="bt" data-k="${b.key}"><span><span class="dot"></span> &nbsp;${b.title}</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        <span class="bt-actions">
+          <span class="bt-btn" data-act="copy" data-k="${b.key}">复制</span>
+          <span class="bt-btn" data-act="json" data-k="${b.key}">导出JSON</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </span></div>
       <div class="body" id="body-${b.key}"></div>`;
     box.appendChild(wrap);
     const bt=wrap.querySelector('.bt'); const body=wrap.querySelector('.body');
-    bt.onclick=()=>{ bt.classList.toggle('open'); body.classList.toggle('open'); };
+    bt.onclick=(e)=>{ if(e.target.closest('.bt-btn'))return; bt.classList.toggle('open'); body.classList.toggle('open'); };
+    wrap.querySelectorAll('.bt-btn').forEach(btn=>{
+      btn.onclick=(e)=>{ e.stopPropagation(); onBlockAction(btn.dataset.act, btn.dataset.k, btn); };
+    });
   });
   for(const b of blocks){
     const bt=document.querySelector(`.bt[data-k="${b.key}"]`); const body=document.getElementById('body-'+b.key);
@@ -935,9 +1025,10 @@ function kwAnalysisHTML(A,ctx){
   }
   let html='';
   K.refs.forEach(r=>{
+    const appLine = r.application ? `<div class="kw-line"><span class="kw-tag app">应用</span><span class="kw-app">${r.application}</span></div>` : '';
     html+=`<div class="kw-ref"><div class="kw-ref-h">${r.label}</div>
       <div class="kw-line"><span class="kw-tag feat">特征</span>${(r.features||[]).map(f=>`<span class="kw">${f}</span>`).join('')}</div>
-      <div class="kw-line"><span class="kw-tag app">应用</span><span class="kw-app">${r.application||''}</span></div></div>`;
+      ${appLine}</div>`;
   });
   if(K.summary) html+=`<div style="margin-top:8px;font-size:9px;color:var(--shell-txt-mute);line-height:1.6">融合方向：${K.summary}</div>`;
   return html;
@@ -959,6 +1050,61 @@ function worldviewHTML(A,ctx,sk){
       ${rows.map(r=>`<div class="wv-row"><span class="wv-k">${r[0]}</span><span class="wv-v">${r[1]}</span></div>`).join('')}
     </div>`;
   }).join('');
+}
+
+/* 把某模块序列化成「纯文本」（复制用）和「JSON文本」（导出用），只取该模块自己的数据 */
+function blockToText(key){
+  const A=window.__ANALYSIS__||{};
+  if(key==='palette'){
+    const P=A.palette||{}; let t='【品牌色彩系统】\n';
+    if(P.source)t+='取色来源：'+P.source+'\n';
+    (P.groups||[]).forEach(g=>{ t+='\n'+(g.type||'')+'\n';
+      (g.colors||[]).forEach(c=>{ t+=`  ${c.name}  ${c.hex}  ${c.use||''}\n`; }); });
+    return t.trim();
+  }
+  if(key==='kw'){
+    const K=A.keywords||{}; let t='【关键词分析】\n';
+    (K.refs||[]).forEach(r=>{ t+='\n'+(r.label||'')+'\n';
+      t+='  特征：'+(r.features||[]).join('、')+'\n';
+      if(r.application)t+='  应用：'+r.application+'\n'; });
+    if(K.summary)t+='\n融合方向：'+K.summary+'\n';
+    return t.trim();
+  }
+  if(key==='world'){
+    const W=A.worldview||{}; let t='【世界观扩写】\n';
+    (W.plans||[]).forEach((p,i)=>{ t+=`\n方案${['一','二','三','四'][i]||(i+1)}：${p.name||''}${p.recommend?'（推荐）':''}\n`;
+      if(p.concept)t+='  核心概念：'+p.concept+'\n';
+      if(p.visual)t+='  视觉元素：'+p.visual+'\n';
+      if(p.symbol)t+='  象征意义：'+p.symbol+'\n';
+      if(p.slogan)t+='  品牌口号：“'+p.slogan+'”\n';
+      if(p.values&&p.values.length)t+='  核心价值：'+p.values.join(' · ')+'\n'; });
+    return t.trim();
+  }
+  return '';
+}
+function blockToJSON(key){
+  const A=window.__ANALYSIS__||{};
+  const map={palette:'palette',kw:'keywords',world:'worldview'};
+  const data={}; data[map[key]||key]=A[map[key]||key]||null;
+  return JSON.stringify(data,null,2);
+}
+function onBlockAction(act,key,btn){
+  if(!hasRealAnalysis()){ toast('还没有真分析数据，先出图生成',false); return; }
+  if(act==='copy'){
+    navigator.clipboard.writeText(blockToText(key)).then(()=>{
+      const old=btn.textContent; btn.textContent='已复制'; btn.classList.add('ok');
+      setTimeout(()=>{ btn.textContent=old; btn.classList.remove('ok'); },1200);
+    });
+  }else if(act==='json'){
+    const txt=blockToJSON(key);
+    navigator.clipboard.writeText(txt);
+    const blob=new Blob([txt],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download=(key==='palette'?'palette':key==='kw'?'keywords':'worldview')+'.json';
+    a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    const old=btn.textContent; btn.textContent='已导出'; btn.classList.add('ok');
+    setTimeout(()=>{ btn.textContent=old; btn.classList.remove('ok'); },1200);
+  }
 }
 
 function waitHint(title,desc){
@@ -1067,12 +1213,9 @@ Promise.all([loadOutputs(),loadAnalysis()]).then(loadBuiltins).then(()=>{
   const hasBatch=window.__OUTPUTS__&&Object.keys(window.__OUTPUTS__).length;
   if(matched){
     selectSkill(matched.id);
-  }else if(hasBatch){
-    // 纯参考图直出批次：不选技能，用真配色渲染画布，主角走 manifest
+  }else{
+    // 风格技能非必选：无匹配技能（含 __bare__）或空工作台首开，一律保持「未选择风格」，画布空白
     deselectSkill();
-  }else if(SKILLS.length){
-    // 没有任何出图批次时（空工作台首开）才默认选第一个技能供预览
-    selectSkill(SKILLS[0].id);
   }
   // 启动即回填：若 outputs 里已有 agent 真出图，直接铺进画布（无需先点生成）
   if(hasBatch){

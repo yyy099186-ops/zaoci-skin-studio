@@ -10,3 +10,4 @@ node_modules/
 .vercel
 _outputs_jinx_backup/
 refs/
+outputs/hero.png
