@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>造次 · 游戏皮肤工作台 — 使用说明</title>
+<title>小游戏品牌概念工坊 — 使用说明</title>
 <style>
   :root{
     --ink:#1c1c22; --sub:#5f5e63; --hint:#8a8990;
     --line:#e6e5ea; --card:#ffffff; --bg:#f5f4f8;
-    --blue:#26A0DC; --blue-d:#185FA5; --blue-bg:#E6F1FB;
+    --blue:#2b9c33; --blue-d:#1f7a26; --blue-bg:#EAF6E9;
     --pink:#FF5FA2; --pink-bg:#FBEAF0;
     --amber:#BA7517; --amber-bg:#FAEEDA;
     --green:#3B6D11; --green-bg:#EAF3DE;
@@ -24,7 +24,7 @@
   h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:8px}
   .hero p{color:var(--sub);font-size:15px}
   .urlbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;
-    background:var(--blue-bg);border:1px solid #cfe4f7;border-radius:12px;padding:16px 18px}
+    background:var(--blue-bg);border:1px solid #c3e6c0;border-radius:12px;padding:16px 18px}
   .urlbox .lab{font-size:13px;color:var(--blue-d);font-weight:500}
   .urlbox a{font-size:17px;color:var(--blue-d);font-weight:600;text-decoration:none;word-break:break-all}
   .urlbox a:hover{text-decoration:underline}
@@ -81,8 +81,8 @@
 
   <div class="hero">
     <span class="badge">品牌设计组 · 内部工具</span>
-    <h1>造次 Zaoci · 游戏皮肤工作台</h1>
-    <p>把「风格技能」变成成套小游戏 UI 设计方案的可视化工作台。上传参考图、填主题参数、一键攒出设计任务，右侧同步产出品牌色彩系统、关键词分析与世界观扩写。</p>
+    <h1>小游戏品牌概念工坊</h1>
+    <p>把一个「小游戏活动主题」变成品牌概念全案 + 成套风格化 UI 的可视化工坊。上传参考图、填主题参数、一键攒出设计任务，右侧同步产出品牌色彩系统、关键词分析与世界观扩写。</p>
     <div class="urlbox">
       <span class="lab">打开网址</span>
       <a href="https://zaoci-skin-studio.vercel.app/" target="_blank">https://zaoci-skin-studio.vercel.app/</a>
@@ -140,19 +140,23 @@
   <div class="card">
     <h2><span class="n">4</span>真图和真分析怎么出来 — 请务必读这段</h2>
     <div class="note warn">
-      <div class="h">⚠ 点「生成」不会当场凭空冒出你新传那套图的真图真分析</div>
-      因为「按参考图真出图、真取色、写世界观」是 AI 模型能力，不在网页浏览器里。网页负责<b>上传、填参、预览、把任务打包成 job.json</b>；真正出图和分析这一步，现阶段由 miko 在助手里代跑。
+      <div class="h">⚠ 点「生成」不会在网页里当场冒出真图真分析</div>
+      因为「按参考图真出图、真取色、写世界观」是 <b>WorkBuddy 的能力</b>，不在网页浏览器里。好消息是：<b>你自己的 WorkBuddy 就有这个能力</b>，不用发给别人代跑。只要装一个「自跑技能」，把网页导出的 job.json 丢进去，你的 WorkBuddy 就能自己跑出整套真图和真分析。
+    </div>
+    <div class="note ok" style="margin-top:12px">
+      <div class="h">装「自跑技能」（一次性，约 1 分钟）</div>
+      在网页左栏底部点 <b>「装『自跑技能』到你的 WorkBuddy」</b> 下载那个 zip → 打开你的 WorkBuddy，让它帮你安装这个技能包（把 zip 拖给它、说「帮我安装这个技能」即可）。装一次以后一直能用。
     </div>
     <div class="flow">
       <div class="f"><div class="t">你</div><div class="d">网页填参点生成<br>拿到 job.json</div></div>
       <div class="arr">→</div>
-      <div class="f"><div class="t">发给 miko</div><div class="d">把 job.json 或<br>参考图+主题发来</div></div>
+      <div class="f"><div class="t">丢进你的 WorkBuddy</div><div class="d">连同 job.json<br>+ 那几张参考图</div></div>
       <div class="arr">→</div>
-      <div class="f"><div class="t">助手代跑</div><div class="d">真出图 + 真取色<br>+ 写世界观</div></div>
+      <div class="f"><div class="t">它自己跑</div><div class="d">真出图 + 真取色<br>+ 写世界观</div></div>
       <div class="arr">→</div>
-      <div class="f"><div class="t">回填</div><div class="d">刷新网页<br>就看到结果</div></div>
+      <div class="f"><div class="t">回填</div><div class="d">落到本地 outputs<br>刷新网页看结果</div></div>
     </div>
-    <p style="font-size:13px;color:var(--sub);margin-top:14px">所以流程是「网页攒任务 → 发 miko 跑 → 刷新看结果」。等后续接上后端，这一步会变成网页内点一下自动完成，用法不变。</p>
+    <p style="font-size:13px;color:var(--sub);margin-top:14px">所以流程是「网页攒任务 → 丢进自己的 WorkBuddy 跑 → 刷新看结果」，<b>全程不经过 miko、也不经过别人</b>。等后续接上后端，这一步会变成网页内点一下自动完成，用法不变。</p>
   </div>
 
   <div class="card">
@@ -169,13 +173,13 @@
         </ul>
       </div>
       <div class="w">
-        <div class="r">出真图真分析（现阶段）</div>
+        <div class="r">你自己的 WorkBuddy（装了自跑技能后）</div>
         <ul>
-          <li class="y">把 job.json 或参考图+主题发 miko</li>
-          <li class="y">助手真调三谦出成套图</li>
+          <li class="y">读你导出的 job.json + 参考图</li>
+          <li class="y">真调三谦出成套图</li>
           <li class="y">对参考图真取色、写 2+ 套世界观</li>
-          <li class="y">结果回填，刷新网页即显示</li>
-          <li class="n">无需你懂任何代码</li>
+          <li class="y">结果落本地 outputs，刷新网页即显示</li>
+          <li class="n">全程不用发给 miko 或任何人</li>
         </ul>
       </div>
     </div>
@@ -185,13 +189,14 @@
     <h2><span class="n">6</span>常见问题</h2>
     <ol class="steps">
       <li><b>打开是空白 / 图裂？</b> 刷新一次；确认网络能访问 vercel.app 域名。</li>
-      <li><b>点生成没反应？</b> 它其实已经把 job.json 下载到你电脑了，去下载文件夹找一下，把它发给 miko 即可。</li>
-      <li><b>我上传的图为什么没变成成品？</b> 见第 4 步——真出图这一步现阶段要发 miko 代跑，不是网页当场生成。</li>
+      <li><b>点生成没反应？</b> 它其实已经把 job.json 下载到你电脑了，去下载文件夹找一下，丢进你的 WorkBuddy 即可。</li>
+      <li><b>我上传的图为什么没变成成品？</b> 见第 4 步——真出图要在你自己的 WorkBuddy 里跑（装了自跑技能后），不是网页当场生成。</li>
+      <li><b>没装自跑技能能出图吗？</b> 不能。网页只负责攒任务和展示；出图分析要靠装了技能的 WorkBuddy。左栏底部就有技能下载入口。</li>
       <li><b>手机能打开吗？</b> 能，但三栏工作台在电脑上体验最佳，建议用电脑操作、手机看预览。</li>
     </ol>
   </div>
 
-  <div class="foot">造次 Zaoci · 游戏皮肤工作台 · 品牌设计组内部使用 · 有问题找 miko</div>
+  <div class="foot">小游戏品牌概念工坊 · 品牌设计组内部使用 · 有问题找 miko</div>
 
 </div>
 </body>
