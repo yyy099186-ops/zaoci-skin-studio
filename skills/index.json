@@ -1,27 +1,32 @@
 {
-  "_note": "sampleMap 仅用于技能封面/风格预览，绝不作为生成结果冒充。生成结果只来自 agent 真出图回填(outputs)。角色一律来自用户上传的参考图，不使用技能自带角色。",
+  "_note": "sampleMap 仅用于技能封面/风格预览。snapshot/ 是该技能已固定的整套样图+配色分析(manifest.json+analysis.json+图)，selectSkill 时加载、deselectSkill 时清空，两套物理隔离互不干扰。角色一律来自用户上传的参考图。",
   "builtin": [
     {
       "id": "runeterra-pixel",
       "dir": "skills/runeterra-pixel",
       "hasSamples": true,
+      "hasSnapshot": true,
+      "snapshot": "snapshot",
       "sampleMap": {},
       "styleSamples": [
         "references/samples/01-home-title.png",
         "references/samples/02-level-map.png",
         "references/samples/03-battle.png"
       ],
-      "cover": "references/samples/01-home-title.png"
+      "cover": "references/samples/cover.png"
     },
     {
       "id": "street-anime-kawaii",
       "dir": "skills/street-anime-kawaii",
       "hasSamples": true,
+      "hasSnapshot": true,
+      "snapshot": "snapshot",
       "sampleMap": {},
       "styleSamples": [
+        "references/samples/01-login.png",
         "references/samples/07-components.png"
       ],
-      "cover": "references/samples/07-components.png"
+      "cover": "references/samples/cover.png"
     }
   ]
 }

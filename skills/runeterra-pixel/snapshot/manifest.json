@@ -1,0 +1,44 @@
+{
+  "_note": "金克丝 × 符文之境魔幻史诗像素风 完整套图。每格 nano pro + gpt-image-2 对比双图，主角金克丝由 heroji.png 锁定，图生图复用同一主角。",
+  "batch": "jinx-runeterra-20260812",
+  "style_id": "runeterra_pixel",
+  "style_name": "符文之境魔幻史诗像素风",
+  "theme": "像素闯关",
+  "mascot": "金克丝",
+  "ref_hero": "heroji.png",
+  "outModel": "compare",
+  "palette": [
+    {"hex": "#070C21", "name": "虚空夜蓝"},
+    {"hex": "#0A1631", "name": "深海靛蓝"},
+    {"hex": "#11244D", "name": "冷石蓝"},
+    {"hex": "#143267", "name": "符文蓝"},
+    {"hex": "#43DAE2", "name": "符文青光"},
+    {"hex": "#135A8A", "name": "深潮青蓝"},
+    {"hex": "#61B1BC", "name": "浅雾青"},
+    {"hex": "#3E6F58", "name": "秘境岩绿"},
+    {"hex": "#F2B75F", "name": "曙光暖金"},
+    {"hex": "#0A0B10", "name": "岩黑描边"}
+  ],
+  "cells": {
+    "login": {
+      "nano": "login_nano.png",
+      "gpt": "login_gpt.png"
+    },
+    "level": {
+      "nano": "level_nano.png",
+      "gpt": "level_gpt.png"
+    },
+    "battle": {
+      "nano": "battle_nano.png",
+      "gpt": "battle_gpt.png"
+    },
+    "result": {
+      "nano": "result_nano.png",
+      "gpt": "result_gpt.png"
+    },
+    "components": {
+      "nano": "components_nano.png",
+      "gpt": "components_gpt.png"
+    }
+  }
+}

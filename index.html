@@ -323,7 +323,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
-      <span class="ver-badge" id="ver-badge" title="当前版本">v2.0</span>
+      <span class="ver-badge" id="ver-badge" title="当前版本">v2.1</span>
       <a class="guide-link" href="guide" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
@@ -520,6 +520,7 @@ async function loadBuiltins(){
         (cellId)=>{ const rel=(b.sampleMap||{})[cellId]; return rel?dir+rel:null; });
       sk._cover = b.cover ? dir+b.cover : null;
       sk._styleSamples = (b.styleSamples||[]).map(s=>dir+s);  // 仅供风格预览
+      sk._snapshotDir = b.hasSnapshot ? dir+(b.snapshot||'snapshot')+'/' : null;  // 该技能已固定的整套样图+分析
       SKILLS.push(sk);
     }catch(e){ console.warn('内置技能加载失败',b.id,e); }
   }
@@ -576,8 +577,8 @@ function renderSkillList(){
   });
 }
 
-/* ---------- 选中技能：套皮 + 更新头部。再点一次取消选中 ---------- */
-function selectSkill(id){
+/* ---------- 选中技能：加载该技能已固定的样图快照 + 套皮。再点一次取消选中 ---------- */
+async function selectSkill(id){
   if(activeId===id){ deselectSkill(); return; }   // 再点一次 → 取消
   activeId=id; const sk=SKILLS.find(s=>s.id===id); if(!sk)return;
   renderSkillList();
@@ -587,18 +588,28 @@ function selectSkill(id){
   document.getElementById('active-style-chip').textContent=sk.name;
   syncModelChip();
   document.getElementById('btn-gen').disabled=false;
+  // 加载该技能自己的固定样图快照（两套互不干扰）
+  const ok=await loadSnapshot(sk);
   resetGrid(sk);
   renderHero(sk);
+  if(ok){
+    // 快照有整套真图 → 铺满画布 + 右栏真分析
+    if(window.__OUTPUTS__&&Object.keys(window.__OUTPUTS__).length){ applyFilled(window.__OUTPUTS__); }
+    paintPaletteCell(sk); paintComponentsCell(sk);
+    if(hasRealAnalysis()) runAgentAnalysis(sk, collectCtx());
+  }
 }
-/* 取消选中：不套任何风格皮肤，仅凭参考图出图 */
+/* 取消选中：清空画布/右栏/配色（不选的时候没有图），仅凭参考图仍可出图 */
 function deselectSkill(){
   activeId=null; renderSkillList();
   document.getElementById('active-style-chip').textContent='未选择风格（仅凭参考图）';
   syncModelChip();
+  clearBatch();
   document.getElementById('hero-group').style.display='none';
   buildEmptyGrid();
-  // 未选技能时，配色/组件格仍用 agent 真数据渲染（若有），不留空白
+  // 不选技能 → 配色格/组件格也空（只留提示），右栏三块显示占位
   paintPaletteCell(null); paintComponentsCell(null);
+  clearAnalysisPanels();
   // 有参考图仍可生成
   document.getElementById('btn-gen').disabled = !(window.__REFS__&&__REFS__.ref.length>0);
 }
@@ -618,12 +629,12 @@ function renderHero(sk){
         <span class="lock">✓ 已锁定参考图</span></div>
     </div>`;
   }else if(window.__MANIFEST__&&window.__MANIFEST__.ref_hero){
-    // demo 回填：manifest 里已有主角 sheet，直接展示
-    const m=window.__MANIFEST__, src='outputs/'+m.ref_hero;
+    // 快照回填：manifest 里已有主角 sheet，直接展示（快照模式用 _heroSrc 指向 snapshot 目录）
+    const m=window.__MANIFEST__, src=m._heroSrc||('outputs/'+m.ref_hero);
     box.innerHTML=`<div class="hero-card">
       <img src="${src}?t=${Date.now()}" alt="主角">
       <div class="hi"><div class="t">主角：${m.mascot||'参考角色'}</div>
-        <div class="d">本批真图的角色锚点，login/level/battle/result 图生图复用同一角色</div>
+        <div class="d">本套样图的角色锚点，各界面图生图复用同一角色</div>
         <span class="lock">✓ 已锁定主角</span></div>
     </div>`;
   }else{
@@ -941,7 +952,8 @@ function imgFail(img){
 }
 /* 归一化回填值：可为 "x.png" | {nano,gpt} | {单图}，统一成 {nano,gpt}（缺则用另一个补） */
 function normFill(val){
-  const fix=s=>{ if(!s)return null; return /^https?:|^outputs\//.test(s)?s:'outputs/'+s; };
+  // 已是 http(s) / outputs/ / 含目录的相对路径(如 skills/xxx/snapshot/a.png) → 原样；纯文件名 → 补 outputs/
+  const fix=s=>{ if(!s)return null; return /^https?:|^outputs\/|\//.test(s)?s:'outputs/'+s; };
   if(typeof val==='string') return {single:fix(val)};
   if(val&&typeof val==='object'){
     const n=fix(val.nano||val.nanopro||null), g=fix(val.gpt||val['gpt-image-2']||val.image2||null);
@@ -1024,6 +1036,15 @@ function closeLB(){ document.getElementById('lb').classList.remove('show'); }
    内容优先来自 window.__ANALYSIS__（agent 真看图产出：真取色 + 品牌化命名 + 品牌话术）。
    没有真分析时不再 JS 拼假词，而是显示「待生成」提示，保证展示的都是真东西。 */
 function hasRealAnalysis(){ return window.__ANALYSIS__ && (window.__ANALYSIS__.palette||window.__ANALYSIS__.keywords||window.__ANALYSIS__.worldview); }
+
+/* 不选技能时清空右栏三模块，只留一句提示（不选的时候没有图/没有分析） */
+function clearAnalysisPanels(){
+  const box=document.getElementById('dna-container'); if(!box)return;
+  box.innerHTML=`<div style="padding:32px 20px;text-align:center;color:var(--shell-txt-mute);font-size:12px;line-height:1.9">
+      <div style="font-size:26px;margin-bottom:10px;opacity:.5">🎨</div>
+      请先在左侧<b style="color:var(--shell-txt-dim)">选择一个风格技能</b><br>
+      选中后这里会显示该风格的<br>品牌色彩系统 / 关键词分析 / 世界观扩写</div>`;
+}
 
 async function runAgentAnalysis(sk,ctx){
   const box=document.getElementById('dna-container');
@@ -1196,6 +1217,34 @@ async function loadAnalysis(){
   catch(e){ window.__ANALYSIS__=null; }
 }
 
+/* 载入某技能已固定的整套样图快照（manifest+analysis+图）。
+   两套物理隔离在各自 snapshot/ 目录，选技能时加载对应快照 → 铺画布+右栏。
+   把 cells 里的图文件名补上 snapshotDir 前缀，指向该技能自己的图。 */
+async function loadSnapshot(sk){
+  if(!sk||!sk._snapshotDir){ clearBatch(); return false; }
+  const dir=sk._snapshotDir;
+  try{
+    const [m,a]=await Promise.all([
+      getJSON(dir+'manifest.json?t='+Date.now()),
+      getJSON(dir+'analysis.json?t='+Date.now()).catch(()=>null),
+    ]);
+    // 给每个 cell 的图路径补上快照目录前缀（原本是裸文件名）
+    const cells=(m&&m.cells)||{};
+    const prefix=v=>{ if(!v)return v; if(typeof v==='string') return /^https?:|\//.test(v)?v:dir+v;
+      const o={}; for(const k in v){ o[k]=(typeof v[k]==='string'&&!/^https?:|\//.test(v[k]))?dir+v[k]:v[k]; } return o; };
+    const fixed={}; for(const cid in cells) fixed[cid]=prefix(cells[cid]);
+    if(m){ m.cells=fixed; if(m.ref_hero&&!/^https?:|\//.test(m.ref_hero)) m._heroSrc=dir+m.ref_hero; }
+    window.__MANIFEST__=m||null;
+    window.__OUTPUTS__=fixed;
+    window.__ANALYSIS__=a||null;
+    return true;
+  }catch(e){ console.warn('快照加载失败',sk.id,e); clearBatch(); return false; }
+}
+/* 清空当前批次数据（不选技能 / 无快照时）：画布空、右栏空、配色格空 */
+function clearBatch(){
+  window.__MANIFEST__=null; window.__OUTPUTS__=null; window.__ANALYSIS__=null;
+}
+
 /* ---------- 工具函数 ---------- */
 function collectCtx(){
   const R=window.__REFS__||{ref:[],aes:[],ui:[]};
@@ -1273,33 +1322,14 @@ document.getElementById('lb').onclick=e=>{ if(e.target.id==='lb')closeLB(); };
 document.getElementById('lb-copy').onclick=()=>{ navigator.clipboard.writeText(document.getElementById('lb-prompt-text').textContent); toast('Prompt 已复制',true); };
 document.addEventListener('keydown',e=>{ if(!document.getElementById('lb').classList.contains('show'))return;
   if(e.key==='Escape')closeLB(); if(e.key==='ArrowLeft')lbStep(-1); if(e.key==='ArrowRight')lbStep(1); });
-Promise.all([loadOutputs(),loadAnalysis()]).then(loadBuiltins).then(()=>{
-  // 有出图批次时：只在 style_id 指向真实存在的技能包时才高亮该技能；
-  // 若是 __bare__ / 无对应技能（纯参考图直出），绝不 fallback 到 SKILLS[0]，
-  // 而是保持「未选择风格」，画布配色/组件走 analysis.json 真配色，避免刷新后套上别家皮肤。
-  const wantId=window.__MANIFEST__&&window.__MANIFEST__.style_id;
-  const matched=wantId&&wantId!=='__bare__'?SKILLS.find(s=>s.id===wantId):null;
-  const hasBatch=window.__OUTPUTS__&&Object.keys(window.__OUTPUTS__).length;
-  if(matched){
-    selectSkill(matched.id);
-  }else{
-    // 风格技能非必选：无匹配技能（含 __bare__）或空工作台首开，一律保持「未选择风格」，画布空白
-    deselectSkill();
-  }
-  // 启动即回填：若 outputs 里已有 agent 真出图，直接铺进画布（无需先点生成）
-  if(hasBatch){
-    applyFilled(window.__OUTPUTS__);
-    // demo 里主角来自 manifest，刷新锚点显示
-    if(typeof refreshHeroFromRefs==='function') refreshHeroFromRefs();
-    // 真图批次里配色格改用真配色（不被技能预设覆盖）
-    paintPaletteCell(matched||null);
-    toast('已载入本批真图',true);
-  }
-  // 启动即渲染右栏真分析：若 outputs/analysis.json（agent 真产出）存在，直接铺进右栏
-  if(hasRealAnalysis()){
-    const sk=(activeId&&SKILLS.find(s=>s.id===activeId))||matched||null;
-    runAgentAnalysis(sk, collectCtx());
-  }
+// 样图机制（v2.1）：启动只加载技能列表，不再无条件读全局 outputs 铺图。
+// 保持「未选择风格」——画布空、右栏空、配色格空，只留提示语。
+// 用户点左栏某个技能 → selectSkill → loadSnapshot 加载该技能自己的样图+分析快照。
+// 两套（符文之境/街头二次元）物理隔离，永不串色。
+loadBuiltins().then(()=>{
+  // 全局 manifest/analysis 一律清空，杜绝任何默认铺图
+  window.__MANIFEST__=null; window.__ANALYSIS__=null; window.__OUTPUTS__=null;
+  deselectSkill();   // 首开即未选择态：画布空、右栏占位提示、配色格空
 });
 </script>
 </body>
