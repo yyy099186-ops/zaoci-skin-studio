@@ -8,3 +8,5 @@ jobs/*.json
 outputs/_*.png
 node_modules/
 .vercel
+_outputs_jinx_backup/
+refs/

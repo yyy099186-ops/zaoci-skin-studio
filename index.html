@@ -547,6 +547,8 @@ function deselectSkill(){
   document.getElementById('model-chip').textContent='模型路由 · gpt-image-2';
   document.getElementById('hero-group').style.display='none';
   buildEmptyGrid();
+  // 未选技能时，配色/组件格仍用 agent 真数据渲染（若有），不留空白
+  paintPaletteCell(null); paintComponentsCell(null);
   // 有参考图仍可生成
   document.getElementById('btn-gen').disabled = !(window.__REFS__&&__REFS__.ref.length>0);
 }
@@ -597,8 +599,37 @@ function resetGrid(sk){
   // 配色格 & 组件格：即便没出图，也用技能真实数据静态预览
   paintPaletteCell(sk); paintComponentsCell(sk);
 }
+/* 取真配色：优先用 agent 真分析（从 UI/角色参考图提取，写在 analysis.json / manifest.json），
+   其次才退回技能 tokens。返回 [{hex,name}] 顺序色卡。 */
+function realPaletteColors(){
+  // 1) analysis.json 的品牌色系（真取色，最权威）
+  const P=window.__ANALYSIS__&&window.__ANALYSIS__.palette;
+  if(P&&P.groups&&P.groups.length){
+    const out=[];
+    P.groups.forEach(g=>(g.colors||[]).forEach(c=>{ if(c.hex) out.push({hex:c.hex,name:c.name||''}); }));
+    if(out.length) return out;
+  }
+  // 2) manifest.json 里若直接带了 palette 数组/对象也认
+  const mp=window.__MANIFEST__&&window.__MANIFEST__.palette;
+  if(Array.isArray(mp)&&mp.length) return mp.map(x=>typeof x==='string'?{hex:x,name:''}:{hex:x.hex,name:x.name||''});
+  return null;
+}
 function paintPaletteCell(sk){
   const el=document.getElementById('cell-palette'); if(!el)return;
+  // 先看有没有 agent 真配色（从本批 UI/角色提取的）——有就用真的，不用技能预设
+  const real=realPaletteColors();
+  if(real&&real.length){
+    const bars=real.map(c=>`<div class="bar" style="background:${c.hex}"></div>`).join('');
+    el.innerHTML=`<span class="cell-sub">DESIGN DNA · 真配色</span><div class="palette-render">${bars}</div>
+      <div style="position:absolute;bottom:8px;left:10px;font-size:10px;color:#fff;text-shadow:0 1px 3px #000;font-weight:600">配色 / 材质（从本批 UI / 角色提取）</div>`;
+    return;
+  }
+  // 没有真配色时才退回技能 tokens 预览；连技能也没有就给占位
+  if(!sk||!sk.palette||!Object.keys(sk.palette).length){
+    el.innerHTML=`<span class="cell-sub">DESIGN DNA · 预览</span>
+      <div class="cell-label" style="opacity:.6">配色 / 材质<br><span style="font-size:9px">出图后从 UI / 角色自动提取</span></div>`;
+    return;
+  }
   const keys=['bg-base','bg-base-2','primary','secondary','accent','accent-2','text-primary'];
   const bars=keys.filter(k=>sk.palette[k]).map(k=>`<div class="bar" style="background:${sk.palette[k]}"></div>`).join('');
   el.innerHTML=`<span class="cell-sub">DESIGN DNA · 预览</span><div class="palette-render">${bars}</div>
@@ -614,6 +645,12 @@ function paintComponentsCell(sk){
     el.innerHTML=`<span class="cell-sub">DESIGN DNA</span><img src="${src}" alt="UI 组件">
       <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 9px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;font-weight:600">UI 组件 · 真图</div>`;
     el.onclick=()=>openLB('components'); return;
+  }
+  // 无组件真图、也没选技能 → 给占位，不报错
+  if(!sk||!sk.skin){
+    el.innerHTML=`<span class="cell-sub">DESIGN DNA · 预览</span>
+      <div class="cell-label" style="opacity:.6">UI 组件<br><span style="font-size:9px">出图后生成组件拆解表</span></div>`;
+    return;
   }
   const s=sk.skin, rad=(sk.shape&&sk.shape.corner)||10;
   const isChamfer=(sk.shape&&/chamfer|hexagon/.test(sk.shape.button_shape||''));
@@ -1022,20 +1059,33 @@ document.getElementById('lb-copy').onclick=()=>{ navigator.clipboard.writeText(d
 document.addEventListener('keydown',e=>{ if(!document.getElementById('lb').classList.contains('show'))return;
   if(e.key==='Escape')closeLB(); if(e.key==='ArrowLeft')lbStep(-1); if(e.key==='ArrowRight')lbStep(1); });
 Promise.all([loadOutputs(),loadAnalysis()]).then(loadBuiltins).then(()=>{
-  // demo 回填：优先选中真图对应的风格技能，让左栏高亮与画布一致
+  // 有出图批次时：只在 style_id 指向真实存在的技能包时才高亮该技能；
+  // 若是 __bare__ / 无对应技能（纯参考图直出），绝不 fallback 到 SKILLS[0]，
+  // 而是保持「未选择风格」，画布配色/组件走 analysis.json 真配色，避免刷新后套上别家皮肤。
   const wantId=window.__MANIFEST__&&window.__MANIFEST__.style_id;
-  const pick=(wantId&&SKILLS.find(s=>s.id===wantId))||SKILLS[0];
-  if(pick)selectSkill(pick.id);
+  const matched=wantId&&wantId!=='__bare__'?SKILLS.find(s=>s.id===wantId):null;
+  const hasBatch=window.__OUTPUTS__&&Object.keys(window.__OUTPUTS__).length;
+  if(matched){
+    selectSkill(matched.id);
+  }else if(hasBatch){
+    // 纯参考图直出批次：不选技能，用真配色渲染画布，主角走 manifest
+    deselectSkill();
+  }else if(SKILLS.length){
+    // 没有任何出图批次时（空工作台首开）才默认选第一个技能供预览
+    selectSkill(SKILLS[0].id);
+  }
   // 启动即回填：若 outputs 里已有 agent 真出图，直接铺进画布（无需先点生成）
-  if(window.__OUTPUTS__&&Object.keys(window.__OUTPUTS__).length){
+  if(hasBatch){
     applyFilled(window.__OUTPUTS__);
     // demo 里主角来自 manifest，刷新锚点显示
     if(typeof refreshHeroFromRefs==='function') refreshHeroFromRefs();
-    toast('已载入本批真图（demo）',true);
+    // 真图批次里配色格改用真配色（不被技能预设覆盖）
+    paintPaletteCell(matched||null);
+    toast('已载入本批真图',true);
   }
   // 启动即渲染右栏真分析：若 outputs/analysis.json（agent 真产出）存在，直接铺进右栏
   if(hasRealAnalysis()){
-    const sk=(activeId&&SKILLS.find(s=>s.id===activeId))||pick||null;
+    const sk=(activeId&&SKILLS.find(s=>s.id===activeId))||matched||null;
     runAgentAnalysis(sk, collectCtx());
   }
 });
