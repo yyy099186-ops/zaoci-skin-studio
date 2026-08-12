@@ -237,10 +237,13 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .kw-ref{margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--shell-line)}
 .kw-ref-h{font-size:11px;font-weight:600;color:var(--cta);margin-bottom:5px}
 .kw-line{display:flex;flex-wrap:wrap;gap:3px;align-items:baseline;margin:3px 0}
-.kw-tag{font-size:8px;padding:1px 5px;border-radius:5px;margin-right:2px;flex-shrink:0}
+.kw-tag{font-size:8px;padding:1px 5px;border-radius:5px;margin-right:2px;flex-shrink:0;align-self:flex-start}
 .kw-tag.feat{background:rgba(61,232,74,.14);color:var(--cta)}
-.kw-tag.app{background:rgba(255,255,255,.08);color:var(--shell-txt-dim)}
+.kw-tag.app{background:rgba(255,255,255,.08);color:var(--shell-txt-dim);display:inline;vertical-align:middle}
 .kw-app{font-size:10px;color:var(--shell-txt-dim);line-height:1.6}
+/* 应用段：不走 flex（避免标签背景盒被长文本拉伸成大灰框），标签内联在文字前 */
+.kw-appblock{margin:5px 0 0}
+.kw-appblock .kw-app{display:inline}
 /* 世界观方案 */
 .wv-plan{margin:0 0 12px;padding:9px 10px;border:1px solid var(--shell-line-strong);border-radius:9px;background:var(--shell-panel-solid)}
 .wv-h{font-size:11px;font-weight:700;color:var(--shell-txt);margin-bottom:7px}
@@ -1083,7 +1086,7 @@ function kwAnalysisHTML(A,ctx){
   }
   let html='';
   K.refs.forEach(r=>{
-    const appLine = r.application ? `<div class="kw-line"><span class="kw-tag app">应用</span><span class="kw-app">${r.application}</span></div>` : '';
+    const appLine = r.application ? `<div class="kw-appblock"><span class="kw-tag app">应用</span><span class="kw-app">${r.application}</span></div>` : '';
     html+=`<div class="kw-ref"><div class="kw-ref-h">${r.label}</div>
       <div class="kw-line"><span class="kw-tag feat">特征</span>${(r.features||[]).map(f=>`<span class="kw">${f}</span>`).join('')}</div>
       ${appLine}</div>`;
