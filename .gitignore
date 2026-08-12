@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+__pycache__/
+_*.py
+_*.js
+_unused/
+jobs/*.json
+outputs/_*.png
+node_modules/
+.vercel

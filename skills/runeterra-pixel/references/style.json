@@ -1,0 +1,45 @@
+{
+  "style_id": "runeterra-pixel",
+  "render_dimension": {
+    "character": "2d_pixel",
+    "scene": "2d_pixel",
+    "icon": "2d_pixel",
+    "title": "2d_pixel_glow",
+    "_consistency_anchor": "crisp medium-granularity pixel art, cel-shading outlines, dithered cyan rune glow ONLY on energy/portal, deep navy-slate dominant background, LEAGUE-OF-LEGENDS chamfer-hexagon UI geometry, gold accent only on frames"
+  },
+  "art_direction": {
+    "vibe": "crisp medium pixel art, cel-shading outlines, Runeterra high-fantasy mood, epic cold mysterious noble restrained-luxury, gemstone rune cyan energy glow, forged-metal + natural-rock materials, cinematic cold dark lighting with cyan fill and gold rim, NOT 8-bit retro, NOT minecraft voxel, NOT tiny sprite, NOT smooth painterly, NOT 3D",
+    "color_direction": "dominant deep navy-blue & slate stone base, secondary gemstone rune cyan glow, gold accent only on frames/rims",
+    "color_instruction": "STRICT RATIO: deep navy-blue & slate stone #0E1E2E #16283A #3E4A52 dominant (~70%); gemstone rune cyan #2FB6E8 #5FD4F5 secondary (~15%) ONLY on portal/energy/current-node/glow; gold #C8A24A #E8C874 accent MAX 8% ONLY on frames/button-rims/icon-edges/stars (gold is a HIGHLIGHT not a fill, NEVER flood gold); tiny amethyst purple #8A5BC8 magic sparkle (~3%); muted forest green #6FBF7A ONLY in canyon foliage (~4%). NEVER let gold or cyan flood the whole screen."
+  },
+  "character_lock": {
+    "rule": "When a character reference image is given, ALWAYS use img2img (image=[inner_url] + input_fidelity=high) and write 'use the EXACT same character from reference, do not redesign'. Reuse the SAME inner_url across every screen. Default to the CENTER-MOST character in a multi-hero reference unless the user specifies otherwise. Never invent a character from text alone.",
+    "example_case": "Garen 'The Might of Demacia': short brown hair, stubble beard, square-jaw rugged face, deep-blue cloth tunic + silver-white gold-trimmed plate armor, brown belt, NO cape / NO hood, large broadsword"
+  },
+  "negative_prompt": {
+    "base": "8-bit retro grain, tiny sprite, minecraft voxel blocky, smooth painterly, 3d render, blurry mushy pixels, muddy colors, oversaturated, gold flooding everything, cluttered busy background, watermark, jpeg artifacts, random english gibberish",
+    "by_type": {
+      "character": "redesigned character, different face, cape, hood, photorealistic, deformed, extra limbs",
+      "background": "cluttered scenery, busy distracting background, cyan flooding, low contrast between subject and UI",
+      "icon": "photorealistic icon, gradient mesh, 3d render",
+      "title-art": "double image, ghosting text, misaligned duplicate layers, unreadable pixelation, typo",
+      "button": "plain rounded rectangle button, flat-edge rectangle button, hexagon without chamfer, cyan-outline-only button, two mismatched buttons"
+    },
+    "execution_bugs": "double image / ghosting text; mixed-color lit stars (cyan-and-gold); lit stars different colors; duplicated / overlapping rune rings; same motif stacked twice in one screen",
+    "style_conflict": "warm sunset palette, desert tones, rose-gold vegas glam, art-deco, pastel cute, daylight bright sky, no-outline soft shading"
+  },
+  "vertical_layout_negative": "NO phone mockup, NO smartphone frame, NO device bezel, NO rounded phone corners, NO hand holding phone, full-bleed edge to edge, no border frame",
+  "unified_component_spec": "### UNIFIED UI COMPONENT SPEC (STRICT - keep LEAGUE-OF-LEGENDS geometric DNA): PRIMARY ACTION BUTTON = ANGULAR HEXAGONAL button with CHAMFERED (beveled 45deg) corners + POINTED DIAMOND END-CAPS on left & right + inset layered bevel faces (mecha-tech, exactly like League of Legends button geometry) + thick gold beveled frame + deep navy-to-bright-blue gradient fill + cyan inner glow + bold gold Chinese lettering. Circular icon button = navy circle + gold chamfered ring + icon. Resource pill = gold-chamfer-framed capsule + round icon + number. Level node = hexagon/diamond chamfered tile + gold frame + number. Item slot = square navy + gold chamfered frame + icon + cyan glow. HP/MP bar = gold-chamfer-framed, cyan HP + blue MP. Avatar = hexagonal gold-chamfer frame. ALL screens reuse these IDENTICAL components, only content changes. DO NOT simplify chamfer into plain rounded rectangles.",
+  "asset_templates": {
+    "character": "pixel-art {subject} converted faithfully from reference (img2img), crisp medium pixel, cel-shading outline, deep-blue + silver-white gold-trimmed armor palette, cyan rune rim-light, on deep-navy background, do not redesign",
+    "background": "clean restrained pixel scene, deep navy-slate base, minimal detail, dark fantasy canyon/ruins, uncluttered so subject and UI pop",
+    "background_hero": "pixel key-art scene, dark fantasy canyon, one giant glowing cyan rune portal ring, distant mountains, volumetric cyan light beams, deep navy dominant, gold rim accents",
+    "level_map": "vertical level-select MAP, NO hero figure, pure architecture & landscape: winding cyan path connecting numbered hexagon/diamond chamfered stage nodes climbing past fantasy buildings (rune portal gate, mage tower with glowing windows, broken roman columns, castle gatehouse, rune arches, shrine), dark canyon with pine forest",
+    "icon": "pixel game icon, gold chamfered frame, dark navy fill, cyan glow edge",
+    "title-art": "big pixel title text \u300c{immutable_text}\u300d, gold-gradient embossed, clean single dark outline, cyan rune outer-glow, readable, NO double image NO ghosting",
+    "core_gameplay_action": "side-view action combat in dark fantasy canyon/ruins, the locked hero centered-lower swinging weapon & casting cyan rune energy at a group of enemy monsters (wolves/stone golems), floating pixel damage numbers, chamfer HUD (hexagonal portrait + cyan HP + blue MP top-left, pause + wave counter top-right, circular chamfer skill buttons bottom-right, joystick bottom-left), restrained background"
+  },
+  "text_render_spec": {
+    "css": "title: pixel font, fill #E8C874 gold gradient, dark #0A1520 single clean outline, cyan outer-glow 0 0 14px rgba(47,182,232,.6); body: pixel font #EAF2FA; accent/number: cyan #2FB6E8 with soft glow; danger label: #E24B4A"
+  }
+}

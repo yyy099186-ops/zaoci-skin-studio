@@ -1,0 +1,16 @@
+{
+  "_note": "agent 真出图回填清单。cells 里每个 key 对应画布格子 id，value 是 outputs/ 下的真图文件名。此批为『金克丝 × 街头二次元可爱风 · 探宝』完整套图，主角金克丝由 hero.png 锁定，login/level/battle/result 图生图复用同一主角。",
+  "batch": "jinx-treasure-hunt-20260811",
+  "style_id": "street-anime-kawaii",
+  "style_name": "街头二次元可爱风",
+  "theme": "探宝",
+  "mascot": "金克丝",
+  "ref_hero": "hero.png",
+  "cells": {
+    "login": "login.png",
+    "level": "level.png",
+    "battle": "battle.png",
+    "result": "result.png",
+    "components": "components.png"
+  }
+}

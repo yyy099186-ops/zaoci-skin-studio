@@ -1,0 +1,36 @@
+{
+ "style_id": "street-anime-kawaii",
+ "render_dimension": {
+  "character": "2d_flat",
+  "scene": "2d_flat",
+  "icon": "2d_flat",
+  "title": "2d_flat",
+  "_consistency_anchor": "共享: 白色贴纸描边(5px #FFFFFF) / 平光 / 浅半调(0.12) / 白+浅天蓝亮底 / 大眼软萌chibi"
+ },
+ "art_direction": {
+  "vibe": "cheerful bright airy street anime kawaii, cute chibi characters with big eyes, white sticker-cutout outlines, flat clean fills, light halftone accent, sky-blue and mint-green and acid-lime and coral-orange candy palette, youthful fresh energy",
+  "color_direction": "主导 白+浅天蓝 #FFFFFF/#8FD4F5, 强调 荧光黄绿 #D4FF3F",
+  "color_instruction": "白+浅天蓝亮底(50%), 薄荷青#7FD9C4/#3DD6D0+橙#FF7A5C 明快撞色(40%), 荧光黄绿 #D4FF3F 只点关键(10%); 粉 #FFB3C7 仅极少点缀不主导; 整体明亮通透不暗不腻粉"
+ },
+ "negative_prompt": {
+  "base": "blurry, low quality, distorted, deformed, watermark, unwanted text, frame, border, cropped",
+  "by_type": {
+   "character": "multiple characters, duplicate, extra limbs, scene background, adult realistic",
+   "background": "characters, items, UI, HUD, buttons, gameplay screenshot",
+   "background_hero": "UI, HUD, text, characters cropped at edges",
+   "icon": "multiple objects, cluttered background, unwanted text",
+   "title-art": "illegible text, misspelled text, extra letters, overlapping letters"
+  },
+  "style_conflict": "dark, muted, edgy, gritty graffiti wall, pink-heavy, saccharine pastel pink, dense clutter, adult, somber mood, 3D render, photorealistic, gloomy, low-contrast dim"
+ },
+ "asset_templates": {
+  "character": "cute chibi anime character big eyes, soft rounded, white sticker-cutout outline with drop shadow, flat clean fills, bright cheerful, isolated single character centered, full body",
+  "background": "clean bright empty backdrop, light sky-blue gradient with subtle halftone dots and sparse doodles, lots of white space, no characters no UI, full canvas",
+  "background_hero": "bright airy key visual, light sky-blue mint gradient, sparse cute doodles, mid space clear for character overlay",
+  "icon": "cute kawaii sticker game icon, single rounded subject, white sticker outline, flat bright fill, centered",
+  "title-art": "cute rounded bubble-letter logo of 「{immutable_text}」, white sticker outline, bright flat fills, legible, slight playful tilt, isolated"
+ },
+ "text_render_spec": {
+  "css": "标题粗圆体(Baloo)+白描边(-webkit-text-stroke 5px #FFFFFF)+浅蓝软投影(3px 4px 0 rgba(143,212,245,.6))+微倾斜; 正文粗体深灰字; 强调用荧光绿或橙底白字块"
+ }
+}

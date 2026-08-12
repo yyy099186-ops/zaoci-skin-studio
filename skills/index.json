@@ -1,0 +1,27 @@
+{
+  "_note": "sampleMap 仅用于技能封面/风格预览，绝不作为生成结果冒充。生成结果只来自 agent 真出图回填(outputs)。角色一律来自用户上传的参考图，不使用技能自带角色。",
+  "builtin": [
+    {
+      "id": "runeterra-pixel",
+      "dir": "skills/runeterra-pixel",
+      "hasSamples": true,
+      "sampleMap": {},
+      "styleSamples": [
+        "references/samples/01-home-title.png",
+        "references/samples/02-level-map.png",
+        "references/samples/03-battle.png"
+      ],
+      "cover": "references/samples/01-home-title.png"
+    },
+    {
+      "id": "street-anime-kawaii",
+      "dir": "skills/street-anime-kawaii",
+      "hasSamples": true,
+      "sampleMap": {},
+      "styleSamples": [
+        "references/samples/07-components.png"
+      ],
+      "cover": "references/samples/07-components.png"
+    }
+  ]
+}

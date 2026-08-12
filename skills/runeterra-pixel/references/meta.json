@@ -1,0 +1,12 @@
+{
+  "style_id": "runeterra-pixel",
+  "display_name": "符文之境魔幻史诗像素风",
+  "tags": ["像素风", "西方高幻想", "魔幻史诗", "符文能量", "MOBA衍生", "深色暗调", "烫金", "chamfer机甲UI"],
+  "suitable_for": ["闯关小游戏", "动作割草", "roguelike", "卡牌养成", "塔防", "RPG冒险"],
+  "density": "medium",
+  "mood": "克制的史诗华丽 / 冷峻 / 神秘 / 高贵",
+  "family": "西方高幻想半写实 → 像素渲染层（组合技：符文之地DNA × 像素渲染）",
+  "anchor_case": "英雄联盟手游 League of Legends: Wild Rift 界面（DNA底座）× 像素渲染层；游戏本体《符文之境 RUNE REALM》",
+  "model_route": "nano pro (gemini-3-pro-image-preview) — 像素风必走nano pro，gpt-image-2出像素会糊",
+  "hybrid_note": "本风格是组合技产物：DNA层继承自符文之地设计语言（配色/符文母题/chamfer几何/冷光气质），渲染层换成像素。同一DNA也可换手绘插画等其它渲染层。"
+}
