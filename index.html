@@ -803,6 +803,9 @@ async function generate(){
   const ctx=ctx0;
   document.getElementById('btn-gen').disabled=true;
   LB_ITEMS=[];
+  // 点生成=开启一次全新出图：清掉上一套残留的 outputs（含技能 snapshot 样图），
+  // 否则裸风格/换套时会误命中旧图铺预览，而不是进 loading 态等真图回填。
+  window.__OUTPUTS__=null; window.__MANIFEST__=null;
 
   const job={ style_id:sk.id, style_name:sk.name, model:sk.modelRoute,
     theme:ctx.theme, mascot:ctx.mascot, ratio:ctx.ratio, size:ctx.size,
