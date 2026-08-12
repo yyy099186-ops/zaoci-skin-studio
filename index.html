@@ -323,7 +323,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
-      <span class="ver-badge" id="ver-badge" title="当前版本">v2.1</span>
+      <span class="ver-badge" id="ver-badge" title="当前版本">v2.2</span>
       <a class="guide-link" href="guide" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
@@ -745,8 +745,8 @@ function buildPrompt(sk, cellId, ctx){
       : '';
     const pos = `A professional game UI asset breakdown sheet titled "Icon & Panel Resources", tidy grid layout, evenly spaced flat design spec sheet. ${fromRef}STYLE: ${sk.vibe}. COLORS: ${sk.colorInstruction}. `
       + `Sections in rows: (1) icon matrix — journal, quest, guild, backpack, settings, shop, map, mail, gem, coin, heart, star; (2) resource pills / number counters (coins, gems, energy) capsule shape; (3) character class role badges (${(sk.shape&&sk.shape.button_shape&&/chamfer|hexagon/.test(sk.shape.button_shape))?'hexagon & chamfer shields':'shield & rounded badges'}); (4) equipment slot frames strip + skill icon circles with level; (5) HP/progress bars, avatar portrait frames, decorative panels & card backgrounds. `
-      + `Flat spec-sheet layout, NO scene, NO full-body character, NO gameplay screenshot. clean, cohesive, crisp outlines.`;
-    return {cellId, positive:pos, negative:negBase+', scene, character full body, gameplay screenshot, cluttered', model, aspect:'16:9'};
+      + `Flat spec-sheet layout, NO scene, NO full-body character, NO gameplay screenshot. clean, cohesive, crisp outlines. Output strictly in ${ratioLabel(ctx.size)} aspect ratio.`;
+    return {cellId, positive:pos, negative:negBase+', scene, character full body, gameplay screenshot, cluttered', model, aspect:ratioLabel(ctx.size)};
   }
 
   // 关键界面：登录/关卡/战斗/结算
@@ -760,7 +760,7 @@ function buildPrompt(sk, cellId, ctx){
   const pos = `【${sk.name}】${ctx.theme||''} game UI ${cellId} screen, ${ratioLabel(ctx.size)}. `
     + `${consist}${headBody(ctx.ratio)}. STYLE: ${sk.vibe}. COLORS: ${sk.colorInstruction}. SCENE: ${scene}. `
     + (sk.componentSpec?`UI components follow spec: ${String(sk.componentSpec).slice(0,200)}. `:'')
-    + `cohesive with the rest of the set. no watermark, no gibberish text.`;
+    + `cohesive with the rest of the set. Output strictly in ${ratioLabel(ctx.size)} aspect ratio. no watermark, no gibberish text.`;
   return {cellId, positive:pos,
     negative:negBase+(sk.negative.by_type&&sk.negative.by_type.character?', '+sk.negative.by_type.character:''),
     model, aspect:ratioLabel(ctx.size)};
@@ -770,9 +770,9 @@ function buildPrompt(sk, cellId, ctx){
 function buildHeroPrompt(sk, ctx){
   const isPixel = sk.modelRoute.includes('nano');
   return {cellId:'hero',
-    positive:`【${sk.name}】full-body character reference sheet of ${ctx.mascot||'the hero'}, ${headBody(ctx.ratio)}, centered on clean solid background. STYLE: ${sk.vibe}. COLORS: ${sk.colorInstruction}. single character, front view, clear silhouette, consistent design to be reused across all screens. no watermark, no text.`,
+    positive:`【${sk.name}】full-body character reference sheet of ${ctx.mascot||'the hero'}, ${headBody(ctx.ratio)}, centered on clean solid background. STYLE: ${sk.vibe}. COLORS: ${sk.colorInstruction}. single character, front view, clear silhouette, consistent design to be reused across all screens. Output strictly in ${ratioLabel(ctx.size)} aspect ratio. no watermark, no text.`,
     negative:(sk.negative.base||'')+', multiple characters, scene background, gameplay UI',
-    model:isPixel?'gemini-3-pro-image-preview':'gpt-image-2', aspect:'9:16'};
+    model:isPixel?'gemini-3-pro-image-preview':'gpt-image-2', aspect:ratioLabel(ctx.size)};
 }
 
 /* ---------- 生成 ----------
