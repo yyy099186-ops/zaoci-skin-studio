@@ -1,0 +1,60 @@
+{
+  "_note": "自由出图（不套技能）结果 · 金克丝，锚点=用户上传的真金克丝角色设定图（紫麻花辫/鲨鱼火箭筒/涂鸦街头风）。nano pro 图生图 input_fidelity=high，竖版9:16。此文件独立于任何技能 snapshot，仅用于展示「不走技能自由出图」的效果。",
+  "mode": "freerun",
+  "batch": "jinx-freerun-20260812",
+  "mascot": "金克丝（真设定图锚定）",
+  "ref_hero": "_verify_jinx_anime.png",
+  "size": "portrait",
+  "aspect": "9:16",
+  "model": "gemini-3-pro-image-preview",
+  "cells": {
+    "login": { "single": "jinxfree_login.png" },
+    "level": { "single": "jinxfree_level.png" },
+    "battle": { "single": "jinxfree_battle.png" },
+    "result": { "single": "jinxfree_result.png" },
+    "components": { "single": "jinxfree_components.png" }
+  },
+  "analysis": {
+    "palette": {
+      "source": "从本批金克丝自由出图 5 界面（登录/关卡/战斗/结算/组件）median-cut 提取，非技能预设色",
+      "groups": [
+        {
+          "type": "主色 · 薄荷青绿→天空青蓝",
+          "colors": [
+            { "name": "薄荷青绿", "hex": "#A8FAD3", "use": "背景渐变主色 / 清爽底，街头涂鸦的透气空气感" },
+            { "name": "天空青蓝", "hex": "#88D5F4", "use": "渐变下沉色 / 地图水域 / 面板底，撑起纵深" },
+            { "name": "薄雾青", "hex": "#94DFE6", "use": "卡片底 / 中间色阶，柔和过渡" },
+            { "name": "薄雾白绿", "hex": "#DAF9E8", "use": "卡面反白 / 高光 / 文字底" }
+          ]
+        },
+        {
+          "type": "点睛 · 荧光黄绿 CTA",
+          "colors": [
+            { "name": "荧光黄绿", "hex": "#CFFA6C", "use": "START/CHALLENGE/CONTINUE 主按钮 / JINX 涂鸦 tag，最抓眼的街头能量色" },
+            { "name": "浅荧光绿", "hex": "#C9F79F", "use": "按钮高光 / 次级强调" }
+          ]
+        },
+        {
+          "type": "角色 · 金克丝紫粉",
+          "colors": [
+            { "name": "金克丝紫", "hex": "#715283", "use": "角色发色 / 破洞条纹裤 / 面板边框，锁定金克丝身份色" },
+            { "name": "深紫", "hex": "#482950", "use": "深色版 / 描边阴影 / 火箭筒暗部" },
+            { "name": "亮粉", "hex": "#CE6E86", "use": "鲨鱼火箭筒 / 爱心点缀 / 珊瑚粉强调" }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "refs": [
+        { "label": "① 角色参考 · 真金克丝设定图", "feature": "紫色长麻花辫 + 粉紫大眼 + 黑短露脐上衣 + 紫破洞条纹裤 + 鲨鱼/兔子火箭筒 + XX骷髅涂鸦纹身", "apply": "全套 5 界面严格图生图锚定这张设定图，角色 100% 一致，不用技能自带角色" },
+        { "label": "② 视觉语言 · 涂鸦街头贴纸风", "feature": "白色模切贴纸描边 + 半调网点 + 荧光黄绿涂鸦 tag（JINX / XX骷髅 / HA!气泡 / 闪电）", "apply": "作为全局氛围铺满每张界面，让 UI 与角色同一街头涂鸦语系" },
+        { "label": "③ 界面结构 · 休闲闯关手游", "feature": "主菜单立绘+侧边贴纸按钮 / S形关卡地图 / 动感战斗特效 / 三星结算 / 组件规格表", "apply": "标准竖版手游 UI 骨架，套金克丝涂鸦皮，CTA 统一荧光黄绿胶囊" }
+      ]
+    },
+    "worldview": {
+      "name": "JINX MAYHEM · 霓虹混乱",
+      "tagline": "紫辫爆破手的街头涂鸦冒险",
+      "desc": "以英雄联盟金克丝为原型的休闲闯关手游：她扛着鲨鱼火箭筒在霓虹都市街区一路闯关制造混乱（Mayhem）。视觉承接金克丝本体的紫麻花辫 + 涂鸦街头 punk 气质，配薄荷青绿清爽底调形成反差萌，荧光黄绿做能量点睛。"
+    }
+  }
+}

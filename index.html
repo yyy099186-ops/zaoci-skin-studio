@@ -323,7 +323,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
-      <span class="ver-badge" id="ver-badge" title="当前版本">v2.2</span>
+      <span class="ver-badge" id="ver-badge" title="当前版本">v2.3</span>
       <a class="guide-link" href="guide" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
@@ -889,10 +889,41 @@ async function autoSubmitJob(){
   return false;
 }
 
+/* 把 File 转成 data:URL base64，用于嵌进 job.json（让下载的 json 自带参考图） */
+function fileToDataURL(f){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result);
+    r.onerror=()=>res(null);
+    r.readAsDataURL(f);
+  });
+}
+/* 把三类参考图（ref/aes/ui）全部编码进 job.ref_images，agent 读 json 即可直接拿到图，无需另发 */
+async function embedRefsIntoJob(job){
+  const R=window.__REFS__||{ref:[],aes:[],ui:[]};
+  const pack=async(list,kind)=>{
+    const out=[];
+    for(let i=0;i<list.length;i++){
+      const f=list[i];
+      const dataUrl=await fileToDataURL(f);
+      if(dataUrl) out.push({kind, name:f.name||(kind+'_'+i), dataUrl});
+    }
+    return out;
+  };
+  job.ref_images = [].concat(
+    await pack(R.ref,'character'),  // ① 角色/配色参考
+    await pack(R.aes,'graphic'),    // ② 图形元素参考
+    await pack(R.ui,'gameplay')     // ③ 玩法参考
+  );
+  return job;
+}
+
 /* 交三谦出图：优先直存后端（本地工作台模式），无后端则降级为下载 job.json */
 async function exportJob(){
   if(!window.__LAST_JOB__){ toast('先点生成',false); return; }
   const btn=document.getElementById('btn-export');
+  // 把参考图 base64 嵌进 job，确保下载的 json 自带图片
+  try{ await embedRefsIntoJob(window.__LAST_JOB__); }catch(e){}
   // 尝试直存后端
   try{
     const r=await fetch('/api/save-job',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -1245,6 +1276,21 @@ async function loadSnapshot(sk){
     return true;
   }catch(e){ console.warn('快照加载失败',sk.id,e); clearBatch(); return false; }
 }
+/* 加载「自由出图结果」freerun.json（不套技能的最新一套出图）。
+   独立于任何技能 snapshot，图在 outputs/ 下，analysis 内嵌。存在则展示，供「不走技能」流程直接看到最新自由出图。*/
+async function loadFreerun(){
+  try{
+    const f=await getJSON('outputs/freerun.json?t='+Date.now());
+    if(!f||!f.cells) return false;
+    const cells=f.cells; const prefix=v=>{ if(!v)return v; if(typeof v==='string') return /^https?:|\//.test(v)?v:'outputs/'+v;
+      const o={}; for(const k in v){ o[k]=(typeof v[k]==='string'&&!/^https?:|\//.test(v[k]))?'outputs/'+v[k]:v[k]; } return o; };
+    const fixed={}; for(const cid in cells) fixed[cid]=prefix(cells[cid]);
+    window.__OUTPUTS__=fixed;
+    window.__MANIFEST__={cells:fixed, mode:'freerun', mascot:f.mascot, size:f.size, aspect:f.aspect};
+    window.__ANALYSIS__=f.analysis||null;
+    return true;
+  }catch(e){ return false; }
+}
 /* 清空当前批次数据（不选技能 / 无快照时）：画布空、右栏空、配色格空 */
 function clearBatch(){
   window.__MANIFEST__=null; window.__OUTPUTS__=null; window.__ANALYSIS__=null;
@@ -1328,13 +1374,25 @@ document.getElementById('lb-copy').onclick=()=>{ navigator.clipboard.writeText(d
 document.addEventListener('keydown',e=>{ if(!document.getElementById('lb').classList.contains('show'))return;
   if(e.key==='Escape')closeLB(); if(e.key==='ArrowLeft')lbStep(-1); if(e.key==='ArrowRight')lbStep(1); });
 // 样图机制（v2.1）：启动只加载技能列表，不再无条件读全局 outputs 铺图。
-// 保持「未选择风格」——画布空、右栏空、配色格空，只留提示语。
-// 用户点左栏某个技能 → selectSkill → loadSnapshot 加载该技能自己的样图+分析快照。
-// 两套（符文之境/街头二次元）物理隔离，永不串色。
-loadBuiltins().then(()=>{
-  // 全局 manifest/analysis 一律清空，杜绝任何默认铺图
+// v2.3：启动时若存在 outputs/freerun.json（不套技能的最新自由出图），直接展示这套；
+//       否则保持「未选择风格」空态。技能 snapshot 依旧物理隔离，freerun 独立不串。
+loadBuiltins().then(async()=>{
   window.__MANIFEST__=null; window.__ANALYSIS__=null; window.__OUTPUTS__=null;
-  deselectSkill();   // 首开即未选择态：画布空、右栏占位提示、配色格空
+  const hasFree=await loadFreerun();
+  if(hasFree){
+    // 展示自由出图：不高亮任何技能，画布填图，右栏用 freerun 的真分析
+    activeId=null; renderSkillList();
+    document.getElementById('active-style-chip').textContent='自由出图 · 金克丝（未套技能）';
+    syncModelChip();
+    document.getElementById('hero-group').style.display='none';
+    resetGrid(bareSkill());
+    applyFilled(window.__OUTPUTS__);
+    paintPaletteCell(null); paintComponentsCell(null);
+    runAgentAnalysis(bareSkill(), collectCtx());
+    document.getElementById('btn-gen').disabled=false;
+  }else{
+    deselectSkill();   // 无 freerun → 首开空态：画布空、右栏占位、配色格空
+  }
 });
 </script>
 </body>
