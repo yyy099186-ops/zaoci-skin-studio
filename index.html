@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>造次 Zaoci · 游戏皮肤工作台</title>
+<title>小游戏品牌概念工坊</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
-  /* 工具外壳：纯黑 + 荧光绿高亮（对标 Oliver 作品集站） */
-  --shell-bg:#0a0a0a; --shell-bg2:#101010; --shell-panel:#141414;
+  /* 工具外壳：纯黑 + 荧光草绿高亮（对标 Oliver 作品集站 / neon green） */
+  --shell-bg:#080808; --shell-bg2:#0f0f0f; --shell-panel:#131313;
   --shell-panel-solid:#161616; --shell-line:rgba(255,255,255,.07);
   --shell-line-strong:rgba(255,255,255,.14);
   --shell-txt:#f2f2f2; --shell-txt-dim:#9a9a9a; --shell-txt-mute:#666;
-  --cta:#8CFF00; --cta-2:#6fd400; --cta-glow:rgba(140,255,0,.28); --cta-ink:#0a0a0a;
+  --cta:#3DE84A; --cta-2:#2ecc3c; --cta-glow:rgba(61,232,74,.30); --cta-ink:#061206;
   /* 技能皮肤变量（选中风格后被 JS 覆盖，仅用于配色格/组件格预览） */
   --sk-bg:#0E1E2E; --sk-primary:#2FB6E8; --sk-accent:#C8A24A; --sk-text:#EAF2FA;
 }
@@ -25,13 +25,18 @@ body{
 }
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:8px}
-::-webkit-scrollbar-thumb:hover{background:rgba(140,255,0,.4)}
+::-webkit-scrollbar-thumb:hover{background:rgba(61,232,74,.4)}
 
 /* ============ 布局 ============ */
 .app{display:grid;grid-template-columns:308px 1fr 268px;height:100vh;gap:1px;background:var(--shell-line)}
 .col{background:var(--shell-bg);overflow-y:auto;height:100vh}
 .col-left{padding:16px 14px;display:flex;flex-direction:column;gap:14px}
-.col-mid{padding:20px 22px}
+.col-mid{padding:0 22px 20px}
+.marquee{margin:0 -22px 16px;background:var(--cta);overflow:hidden;white-space:nowrap;border-bottom:2px solid var(--cta-2)}
+.mq-track{display:inline-block;padding:7px 0;animation:mq 26s linear infinite}
+.mq-track span{color:var(--cta-ink);font-weight:800;font-size:12px;letter-spacing:1px}
+.mq-track i{font-style:normal;opacity:.55;margin:0 2px}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .col-right{padding:16px 14px}
 
 /* ============ 顶部 logo ============ */
@@ -52,13 +57,13 @@ body{
 /* ============ 上传槽 ============ */
 .drop{border:1.5px dashed var(--shell-line-strong);border-radius:12px;padding:16px 10px;
   text-align:center;cursor:pointer;transition:.18s;background:var(--shell-panel);position:relative}
-.drop:hover{border-color:var(--cta);background:rgba(140,255,0,.04)}
+.drop:hover{border-color:var(--cta);background:rgba(61,232,74,.04)}
 .drop.small{padding:12px 8px}
 .drop .ico{width:26px;height:26px;margin:0 auto 6px;color:var(--shell-txt-mute)}
 .drop .ico svg{width:100%;height:100%}
 .drop .t{font-size:11px;color:var(--shell-txt-dim)}
 .drop .h{font-size:9px;color:var(--shell-txt-mute);margin-top:3px}
-.drop.filled{border-style:solid;border-color:var(--cta);background:rgba(140,255,0,.05)}
+.drop.filled{border-style:solid;border-color:var(--cta);background:rgba(61,232,74,.05)}
 .thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .thumb{position:relative;width:40px;height:40px}
 .thumb img{width:40px;height:40px;object-fit:cover;border-radius:7px;border:1px solid var(--shell-line-strong);display:block}
@@ -97,7 +102,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .skill-card .check{width:16px;height:16px;flex-shrink:0;opacity:0;transition:.15s;color:var(--cta)}
 .skill-card.on .check{opacity:1}
 .skill-card .route{position:absolute;top:5px;right:6px;font-size:8px;padding:1px 5px;border-radius:99px;
-  background:rgba(140,255,0,.14);color:var(--cta)}
+  background:rgba(61,232,74,.14);color:var(--cta)}
 .skill-upload{border:1.5px dashed var(--shell-line-strong);border-radius:10px;padding:9px;text-align:center;
   cursor:pointer;font-size:11px;color:var(--shell-txt-dim);transition:.15s}
 .skill-upload:hover{border-color:var(--cta);color:var(--cta)}
@@ -107,7 +112,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .hero-card .hi{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px}
 .hero-card .hi .t{font-size:11px;font-weight:600;color:var(--shell-txt)}
 .hero-card .hi .d{font-size:9px;color:var(--shell-txt-mute);line-height:1.5}
-.hero-card .hi .lock{font-size:8px;padding:2px 7px;border-radius:99px;background:rgba(140,255,0,.14);
+.hero-card .hi .lock{font-size:8px;padding:2px 7px;border-radius:99px;background:rgba(61,232,74,.14);
   border:1px solid var(--cta);color:var(--cta);align-self:flex-start}
 .hero-empty{padding:12px;text-align:center;font-size:10px;color:var(--shell-txt-mute);
   border:1.5px dashed var(--shell-line-strong);border-radius:10px;line-height:1.6}
@@ -119,6 +124,13 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .btn-gen:hover{background:var(--cta-2);box-shadow:0 4px 20px var(--cta-glow)}
 .btn-gen:active{transform:translateY(1px)}
 .btn-gen:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.selfrun{display:flex;gap:9px;align-items:center;margin-top:10px;padding:9px 10px;border:1px dashed var(--cta);
+  border-radius:9px;background:rgba(61,232,74,.06);text-decoration:none;transition:.15s}
+.selfrun:hover{background:rgba(61,232,74,.12)}
+.selfrun .sr-ic{width:24px;height:24px;flex-shrink:0;border-radius:6px;background:var(--cta);color:var(--cta-ink);
+  display:grid;place-items:center;font-size:14px;font-weight:800}
+.selfrun .sr-tx b{display:block;color:var(--cta);font-size:11.5px;font-weight:700;line-height:1.3}
+.selfrun .sr-tx small{display:block;color:var(--shell-txt-dim);font-size:9.5px;line-height:1.35;margin-top:2px}
 
 /* ============ 中间画布 ============ */
 .canvas-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -198,7 +210,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .kw-ref-h{font-size:11px;font-weight:600;color:var(--cta);margin-bottom:5px}
 .kw-line{display:flex;flex-wrap:wrap;gap:3px;align-items:baseline;margin:3px 0}
 .kw-tag{font-size:8px;padding:1px 5px;border-radius:5px;margin-right:2px;flex-shrink:0}
-.kw-tag.feat{background:rgba(140,255,0,.14);color:var(--cta)}
+.kw-tag.feat{background:rgba(61,232,74,.14);color:var(--cta)}
 .kw-tag.app{background:rgba(255,255,255,.08);color:var(--shell-txt-dim)}
 .kw-app{font-size:10px;color:var(--shell-txt-dim);line-height:1.6}
 /* 世界观方案 */
@@ -267,23 +279,23 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <div class="col col-left">
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
-      <div class="name">造次 <b>Zaoci</b><small>GAME SKIN WORKFLOW</small></div>
+      <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#8CFF00">①</span> 配色 & 品牌 DNA 参考</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">①</span> 配色 & 品牌 DNA 参考</div>
       <div class="sub">从这张提取配色 + 品牌 DNA</div>
       <div class="drop" id="drop-ref"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="17" cy="14" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20c4 0 6 2.5 6 5 0 3-3 3-3 5s2 2 2 4-2.5 6-5 6z"/></svg></div><div class="t">拖放 / 点击添加</div><div class="h">配色系统与品牌调性从这里来</div><div class="thumbs" id="thumbs-ref"></div></div>
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#8CFF00">②</span> 图形元素参考</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">②</span> 图形元素参考</div>
       <div class="sub">提取图形符号 / 造型 / 装饰母题</div>
       <div class="drop small" id="drop-aes"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9 9 9"/></svg></div><div class="t">拖放 / 点击添加</div><div class="thumbs" id="thumbs-aes"></div></div>
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#8CFF00">③</span> 玩法参考</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">③</span> 玩法参考</div>
       <div class="sub">参考界面布局 / 交互 / 玩法结构</div>
       <div class="drop small" id="drop-ui"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="t">拖放 / 点击添加</div><div class="thumbs" id="thumbs-ui"></div></div>
     </div>
@@ -328,11 +340,18 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     </div>
 
     <button class="btn-gen" id="btn-gen" disabled>生 成</button>
-    <button class="btn-gen" id="btn-export" style="display:none;margin-top:8px;background:linear-gradient(135deg,#3a4658,#2a3442);color:#c9ffdd;box-shadow:none">交 agent 真出图 (三谦)</button>
+    <button class="btn-gen" id="btn-export" style="display:none;margin-top:8px;background:linear-gradient(135deg,#1e3a24,#16261a);color:#c9ffdd;box-shadow:none">导出任务 job.json</button>
+    <a class="selfrun" href="game_brand_concept_studio_mikoyuan.zip" download>
+      <span class="sr-ic">⇩</span>
+      <span class="sr-tx"><b>装「自跑技能」到你的 WorkBuddy</b><small>装完把 job.json 丢进去，自己出真图+真分析，无需找 miko 代跑</small></span>
+    </a>
   </div>
 
   <!-- ========== 中栏：出图画布 ========== -->
   <div class="col col-mid">
+    <div class="marquee"><div class="mq-track">
+      <span>品牌概念 <i>✳</i> 世界观扩写 <i>✳</i> 色彩系统 <i>✳</i> 关键词分析 <i>✳</i> 成套UI <i>✳</i> 角色一致性 <i>✳</i> 小游戏皮肤 <i>✳</i> 品牌概念 <i>✳</i> 世界观扩写 <i>✳</i> 色彩系统 <i>✳</i> 关键词分析 <i>✳</i> 成套UI <i>✳</i> 角色一致性 <i>✳</i> 小游戏皮肤 <i>✳</i></span>
+    </div></div>
     <div class="canvas-head">
       <h2>图像生成 <span class="chip" id="active-style-chip">未选择风格</span></h2>
       <span class="chip" id="model-chip">模型路由 —</span>
@@ -747,8 +766,8 @@ async function exportJob(){
     if(r.ok){
       const j=await r.json();
       if(j.ok){
-        toast('出图任务已就位 · 让 agent 出图后会自动回填',true);
-        btn.textContent='已交出图任务 · 等待 agent 回填中…';
+        toast('任务已就位 · 出图后会自动回填',true);
+        btn.textContent='任务已就位 · 等待回填中…';
         startPolling();
         return;
       }
@@ -758,7 +777,7 @@ async function exportJob(){
   const blob=new Blob([JSON.stringify(window.__LAST_JOB__,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='job-'+window.__LAST_JOB__.style_id+'-'+Date.now()+'.json'; a.click();
-  toast('已下载出图任务 · 交给 agent 真调三谦回填',true);
+  toast('已下载 job.json · 丢进装了「自跑技能」的 WorkBuddy 即可出图',true);
 }
 
 /* 轮询 outputs：agent 回填后自动把真图贴进对应格 */
