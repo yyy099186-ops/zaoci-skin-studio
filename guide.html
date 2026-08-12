@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小游戏品牌概念工坊 — 使用说明</title>
+<style>
+  :root{
+    --ink:#1c1c22; --sub:#5f5e63; --hint:#8a8990;
+    --line:#e6e5ea; --card:#ffffff; --bg:#f5f4f8;
+    --blue:#2b9c33; --blue-d:#1f7a26; --blue-bg:#EAF6E9;
+    --pink:#FF5FA2; --pink-bg:#FBEAF0;
+    --amber:#BA7517; --amber-bg:#FAEEDA;
+    --green:#3B6D11; --green-bg:#EAF3DE;
+    --danger:#A32D2D; --danger-bg:#FCEBEB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;padding:32px 16px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto}
+  .hero{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px 34px;margin-bottom:20px}
+  .badge{display:inline-block;font-size:12px;color:var(--blue-d);background:var(--blue-bg);
+    padding:4px 12px;border-radius:20px;font-weight:500;letter-spacing:.5px;margin-bottom:14px}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:8px}
+  .hero p{color:var(--sub);font-size:15px}
+  .urlbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;
+    background:var(--blue-bg);border:1px solid #c3e6c0;border-radius:12px;padding:16px 18px}
+  .urlbox .lab{font-size:13px;color:var(--blue-d);font-weight:500}
+  .urlbox a{font-size:17px;color:var(--blue-d);font-weight:600;text-decoration:none;word-break:break-all}
+  .urlbox a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-bottom:18px}
+  .card h2{font-size:19px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  .card h2 .n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+    border-radius:8px;background:var(--ink);color:#fff;font-size:15px;font-weight:600;flex:0 0 28px}
+  .card .lead{color:var(--sub);font-size:14px;margin-bottom:18px}
+  .steps{counter-reset:s;list-style:none}
+  .steps li{position:relative;padding:12px 0 12px 40px;border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:12px;
+    width:26px;height:26px;border-radius:50%;background:var(--blue-bg);color:var(--blue-d);
+    font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .steps b{font-weight:600}
+  .k{background:#eef1f4;border:1px solid #dfe3e8;border-radius:6px;padding:1px 7px;font-size:13px;
+    font-family:ui-monospace,Menlo,monospace;color:#334}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  .slot{border:1px solid var(--line);border-radius:12px;padding:16px 16px 18px}
+  .slot .tag{font-size:12px;font-weight:600;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:10px}
+  .slot.a .tag{background:var(--blue-bg);color:var(--blue-d)}
+  .slot.b .tag{background:var(--pink-bg);color:#993556}
+  .slot.c .tag{background:var(--green-bg);color:var(--green)}
+  .slot h3{font-size:15px;font-weight:600;margin-bottom:6px}
+  .slot p{font-size:13px;color:var(--sub);line-height:1.6}
+  .panel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+  .panel .p{background:var(--bg);border-radius:10px;padding:14px 16px}
+  .panel .p .t{font-size:14px;font-weight:600;margin-bottom:4px}
+  .panel .p .d{font-size:12.5px;color:var(--sub);line-height:1.55}
+  .note{border-radius:12px;padding:18px 20px;margin-top:4px;font-size:14px;line-height:1.7}
+  .note.warn{background:var(--amber-bg);border:1px solid #f0d9a8}
+  .note.warn .h{color:var(--amber);font-weight:600;margin-bottom:6px;font-size:14px}
+  .note.ok{background:var(--green-bg);border:1px solid #cfe4a8}
+  .note.ok .h{color:var(--green);font-weight:600;margin-bottom:6px;font-size:14px}
+  .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .flow .f{flex:1;min-width:120px;background:var(--bg);border-radius:10px;padding:14px;text-align:center}
+  .flow .f .t{font-size:13px;font-weight:600;margin-bottom:3px}
+  .flow .f .d{font-size:12px;color:var(--hint)}
+  .flow .arr{align-self:center;color:var(--hint);font-size:18px;font-weight:600}
+  .who{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .who .w{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .who .w .r{font-size:14px;font-weight:600;margin-bottom:8px}
+  .who .w ul{list-style:none;font-size:13px;color:var(--sub);line-height:1.9}
+  .who .w li{padding-left:18px;position:relative}
+  .who .w li::before{position:absolute;left:0;top:0}
+  .who .w li.y::before{content:"✓";color:var(--green);font-weight:700}
+  .who .w li.n::before{content:"✕";color:var(--danger);font-weight:700}
+  .foot{text-align:center;color:var(--hint);font-size:12.5px;padding:18px 0 4px}
+  @media(max-width:640px){.three,.who,.panel{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="badge">品牌设计组 · 内部工具</span>
+    <h1>小游戏品牌概念工坊</h1>
+    <p>把一个「小游戏活动主题」变成品牌概念全案 + 成套风格化 UI 的可视化工坊。上传参考图、填主题参数、一键攒出设计任务，右侧同步产出品牌色彩系统、关键词分析与世界观扩写。</p>
+    <div class="urlbox">
+      <span class="lab">打开网址</span>
+      <a href="https://zaoci-skin-studio.vercel.app/" target="_blank">https://zaoci-skin-studio.vercel.app/</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">1</span>先看一眼三栏布局</h2>
+    <p class="lead">打开网址后是一个从左到右的三栏工作台，各司其职：</p>
+    <div class="panel">
+      <div class="p"><div class="t">左栏 · 输入 &amp; 参数</div><div class="d">上传三类参考图、填主题 / 风格 / 角色一致性，底部选风格技能。</div></div>
+      <div class="p"><div class="t">中栏 · 6 格出图画布</div><div class="d">主界面 / 关卡 / 战斗 / 结算 / UI 组件 / 配色板，成套呈现。</div></div>
+      <div class="p"><div class="t">右栏 · 分析</div><div class="d">品牌色彩系统 + 关键词分析 + 世界观扩写，随参考图产出。</div></div>
+    </div>
+    <div class="note ok" style="margin-top:14px">
+      <div class="h">现在打开就有东西看</div>
+      网址里已经带了一套「金克丝 × 海岛探宝」的示例：中栏 6 张真图、右栏真取色的品牌色系 + 2 套世界观。第一次打开直接看这套就能明白工作台长什么样、能产出什么。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2</span>上传参考图 — 三个槽各有分工</h2>
+    <p class="lead">这是最关键的一步。三个上传槽<b>不是随便放</b>，每个槽喂给工作台的信息不一样：</p>
+    <div class="three">
+      <div class="slot a">
+        <span class="tag">① 配色 &amp; 品牌 DNA</span>
+        <h3>定调子</h3>
+        <p>放主角 / 主视觉。工作台从这张<b>提取配色</b>、提炼品牌气质，决定整套方案的色彩系统和世界观基调。</p>
+      </div>
+      <div class="slot b">
+        <span class="tag">② 图形元素</span>
+        <h3>定造型</h3>
+        <p>放你想复用的<b>图形 / 图标 / 装饰母题</b>。工作台参考它的形状语言，让按钮、边框、道具风格统一。</p>
+      </div>
+      <div class="slot c">
+        <span class="tag">③ 玩法</span>
+        <h3>定框架</h3>
+        <p>放你参考的<b>玩法 / 界面结构</b>截图。工作台参考它的信息布局，安排 6 格界面的功能分区。</p>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--hint);margin-top:14px">三个槽不必全填，至少放 ① 配色&amp;DNA 那张，出来的方案质量最高。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3</span>填参数 → 点「生成」</h2>
+    <p class="lead">上传完参考图，在左栏把这几项填一下，然后点底部的生成按钮：</p>
+    <ol class="steps">
+      <li><b>主题</b>：一句话说清这套皮肤的主题，例如「夏日海岛探宝」「赛博电音节」。</li>
+      <li><b>风格技能</b>：在左栏底部选一个已内置的风格（如「街头二次元可爱风」），它决定画风 / 描边 / 组件几何。</li>
+      <li><b>角色一致性</b>：勾上后会锁定 ① 号参考图里的角色，整套图都用同一个人，不会画成另一个。</li>
+      <li>点 <span class="k">生成</span>：工作台会把你所有输入<b>攒成一份任务文件 job.json 并自动下载</b>到你电脑。</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">4</span>真图和真分析怎么出来 — 请务必读这段</h2>
+    <div class="note warn">
+      <div class="h">⚠ 点「生成」不会在网页里当场冒出真图真分析</div>
+      因为「按参考图真出图、真取色、写世界观」是 <b>WorkBuddy 的能力</b>，不在网页浏览器里。好消息是：<b>你自己的 WorkBuddy 就有这个能力</b>，不用发给别人代跑。只要装一个「自跑技能」，把网页导出的 job.json 丢进去，你的 WorkBuddy 就能自己跑出整套真图和真分析。
+    </div>
+    <div class="note ok" style="margin-top:12px">
+      <div class="h">装「自跑技能」（一次性，约 1 分钟）</div>
+      在网页左栏底部点 <b>「装『自跑技能』到你的 WorkBuddy」</b> 下载那个 zip → 打开你的 WorkBuddy，让它帮你安装这个技能包（把 zip 拖给它、说「帮我安装这个技能」即可）。装一次以后一直能用。
+    </div>
+    <div class="flow">
+      <div class="f"><div class="t">你</div><div class="d">网页填参点生成<br>拿到 job.json</div></div>
+      <div class="arr">→</div>
+      <div class="f"><div class="t">丢进你的 WorkBuddy</div><div class="d">连同 job.json<br>+ 那几张参考图</div></div>
+      <div class="arr">→</div>
+      <div class="f"><div class="t">它自己跑</div><div class="d">真出图 + 真取色<br>+ 写世界观</div></div>
+      <div class="arr">→</div>
+      <div class="f"><div class="t">回填</div><div class="d">落到本地 outputs<br>刷新网页看结果</div></div>
+    </div>
+    <p style="font-size:13px;color:var(--sub);margin-top:14px">所以流程是「网页攒任务 → 丢进自己的 WorkBuddy 跑 → 刷新看结果」，<b>全程不经过 miko、也不经过别人</b>。等后续接上后端，这一步会变成网页内点一下自动完成，用法不变。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">5</span>各角色能做什么 · 一图看懂</h2>
+    <div class="who">
+      <div class="w">
+        <div class="r">你（组员 / 设计师）在网址上</div>
+        <ul>
+          <li class="y">上传三类参考图、实时预览</li>
+          <li class="y">填主题 / 选风格 / 勾角色一致性</li>
+          <li class="y">点生成，拿到 job.json 任务文件</li>
+          <li class="y">预览已出的示例真图和分析</li>
+          <li class="n">点生成后当场凭空出你那套的真图真分析</li>
+        </ul>
+      </div>
+      <div class="w">
+        <div class="r">你自己的 WorkBuddy（装了自跑技能后）</div>
+        <ul>
+          <li class="y">读你导出的 job.json + 参考图</li>
+          <li class="y">真调三谦出成套图</li>
+          <li class="y">对参考图真取色、写 2+ 套世界观</li>
+          <li class="y">结果落本地 outputs，刷新网页即显示</li>
+          <li class="n">全程不用发给 miko 或任何人</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">6</span>常见问题</h2>
+    <ol class="steps">
+      <li><b>打开是空白 / 图裂？</b> 刷新一次；确认网络能访问 vercel.app 域名。</li>
+      <li><b>点生成没反应？</b> 它其实已经把 job.json 下载到你电脑了，去下载文件夹找一下，丢进你的 WorkBuddy 即可。</li>
+      <li><b>我上传的图为什么没变成成品？</b> 见第 4 步——真出图要在你自己的 WorkBuddy 里跑（装了自跑技能后），不是网页当场生成。</li>
+      <li><b>没装自跑技能能出图吗？</b> 不能。网页只负责攒任务和展示；出图分析要靠装了技能的 WorkBuddy。左栏底部就有技能下载入口。</li>
+      <li><b>手机能打开吗？</b> 能，但三栏工作台在电脑上体验最佳，建议用电脑操作、手机看预览。</li>
+    </ol>
+  </div>
+
+  <div class="foot">小游戏品牌概念工坊 · 品牌设计组内部使用 · 有问题找 miko</div>
+
+</div>
+</body>
+</html>

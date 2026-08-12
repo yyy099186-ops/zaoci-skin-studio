@@ -41,6 +41,8 @@ body{
 
 /* ============ 顶部 logo ============ */
 .brandbar{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--shell-line);margin-bottom:2px}
+.guide-link{margin-left:auto;flex:0 0 auto;font-size:12px;font-weight:600;color:var(--cta);text-decoration:none;border:1px solid var(--cta);border-radius:7px;padding:5px 10px;transition:.15s;white-space:nowrap}
+.guide-link:hover{background:var(--cta);color:var(--cta-ink);box-shadow:0 0 12px var(--cta-glow)}
 .brandbar .mark{width:30px;height:30px;border-radius:50%;
   background:var(--cta);display:grid;place-items:center;flex-shrink:0}
 .brandbar .mark svg{width:17px;height:17px}
@@ -280,6 +282,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
+      <a class="guide-link" href="guide.html" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
     <div class="group">
