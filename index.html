@@ -1397,7 +1397,7 @@ loadBuiltins().then(async()=>{
   if(hasFree){
     // 展示自由出图：不高亮任何技能，画布填图，右栏用 freerun 的真分析
     activeId=null; renderSkillList();
-    document.getElementById('active-style-chip').textContent='自由出图 · 金克丝（未套技能）';
+    { let fm=(window.__MANIFEST__&&window.__MANIFEST__.mascot)||'参考角色'; fm=String(fm).split(/[（(]/)[0].trim(); document.getElementById('active-style-chip').textContent='自由出图 · '+fm+'（未套技能）'; }
     syncModelChip();
     document.getElementById('hero-group').style.display='none';
     resetGrid(bareSkill());
