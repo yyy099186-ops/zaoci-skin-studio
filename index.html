@@ -55,6 +55,13 @@ body{
 .group>.label{font-size:11px;color:var(--shell-txt-dim);font-weight:600;letter-spacing:.3px}
 .group>.label .slot-idx{font-weight:700;margin-right:2px}
 .group>.sub{font-size:10px;color:var(--shell-txt-mute);margin-top:-4px}
+/* 四槽浓度/接线标签 */
+.wt-tag{display:inline-block;font-size:9px;font-weight:600;padding:1px 6px;border-radius:6px;
+  margin-left:6px;letter-spacing:.2px;vertical-align:middle;border:1px solid transparent}
+.wt-tag.hard{background:rgba(61,232,74,.16);color:#7cffa0;border-color:rgba(61,232,74,.4)}
+.wt-tag.tone{background:rgba(120,170,255,.14);color:#9dc0ff;border-color:rgba(120,170,255,.35)}
+.wt-tag.skel{background:rgba(255,180,90,.14);color:#ffc888;border-color:rgba(255,180,90,.35)}
+.wt-tag.style{background:rgba(200,120,255,.15);color:#d3a3ff;border-color:rgba(200,120,255,.38)}
 
 /* ============ 上传槽 ============ */
 .drop{border:1.5px dashed var(--shell-line-strong);border-radius:12px;padding:16px 10px;
@@ -323,32 +330,32 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="brandbar">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="#0a0a0a" opacity=".45"/></svg></div>
       <div class="name">小游戏 <b>品牌概念工坊</b><small>GAME BRAND CONCEPT STUDIO</small></div>
-      <span class="ver-badge" id="ver-badge" title="当前版本">v2.3.1</span>
+      <span class="ver-badge" id="ver-badge" title="当前版本">v2.4</span>
       <a class="guide-link" href="guide" target="_blank" title="打开组员使用说明">使用说明</a>
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#3DE84A">①</span> 角色 & DNA 参考</div>
-      <div class="sub">从这张提取角色 + 配色 + 品牌 DNA</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">①</span> 角色 & DNA 参考 <span class="wt-tag hard">硬锁 · 最高权重</span></div>
+      <div class="sub">主角只认这张，图生图逐张锁人不重设计；配色优先从这里/界面提取</div>
       <div class="drop" id="drop-ref"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="17" cy="14" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20c4 0 6 2.5 6 5 0 3-3 3-3 5s2 2 2 4-2.5 6-5 6z"/></svg></div><div class="t">拖放 / 点击添加</div><div class="h">主角、配色与品牌调性从这里来</div><div class="thumbs" id="thumbs-ref"></div></div>
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#3DE84A">②</span> 图形元素参考</div>
-      <div class="sub">提取图形符号 / 造型 / 装饰母题</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">②</span> 图形元素参考 <span class="wt-tag tone">调性 · 材质美学</span></div>
+      <div class="sub">抽图形符号 / 造型 / 材质 / 设计美学；缺省时从①角色兜底提取</div>
       <div class="drop small" id="drop-aes"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9 9 9"/></svg></div><div class="t">拖放 / 点击添加</div><div class="thumbs" id="thumbs-aes"></div></div>
     </div>
 
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#3DE84A">③</span> 玩法参考</div>
-      <div class="sub">参考界面布局 / 交互 / 玩法结构</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">③</span> 玩法参考 <span class="wt-tag skel">只借骨架 · 视觉重造</span></div>
+      <div class="sub">只借交互结构 / 布局逻辑；符号、配色、元素一律按①②④重设计，不照抄</div>
       <div class="drop small" id="drop-ui"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="t">拖放 / 点击添加</div><div class="thumbs" id="thumbs-ui"></div></div>
     </div>
 
     <!-- 风格技能：非必选 -->
     <div class="group">
-      <div class="label"><span class="slot-idx" style="color:#3DE84A">④</span> 风格技能（非必选）</div>
-      <div class="sub">选中套用该风格皮肤占位；不选则画布保持空白，纯凭参考图直出</div>
+      <div class="label"><span class="slot-idx" style="color:#3DE84A">④</span> 风格技能（非必选）<span class="wt-tag style">顶高风格 DNA</span></div>
+      <div class="sub">选了不是关分析——分析照跑，只把风格 DNA 浓度顶高；只接风格槽，绝不接①角色（角色永远只认①的参考图）</div>
       <div class="skill-list" id="skill-list"></div>
       <label class="skill-upload" id="skill-upload">+ 上传风格技能包 (.zip)
         <input type="file" accept=".zip" id="skill-file" hidden>
@@ -609,7 +616,8 @@ function deselectSkill(){
   buildEmptyGrid();
   // 不选技能 → 配色格/组件格也空（只留提示），右栏三块显示占位
   paintPaletteCell(null); paintComponentsCell(null);
-  clearAnalysisPanels();
+  // 右栏：即便空态也展示「DNA 浓度/接线」块（讲清四槽分工），其余三块显示占位提示
+  runAgentAnalysis(bareSkill(), collectCtx());
   // 有参考图仍可生成
   document.getElementById('btn-gen').disabled = !(window.__REFS__&&__REFS__.ref.length>0);
 }
@@ -1101,6 +1109,7 @@ async function runAgentAnalysis(sk,ctx){
   const box=document.getElementById('dna-container');
   const A=window.__ANALYSIS__||null;
   const blocks=[
+    {key:'wiring',  title:'DNA 浓度 / 信号接线', build:()=>wiringHTML(sk,ctx)},
     {key:'palette', title:'品牌色彩系统', build:()=>paletteBrandHTML(A,sk)},
     {key:'kw',      title:'关键词分析',   build:()=>kwAnalysisHTML(A,ctx)},
     {key:'world',   title:'世界观扩写',   build:()=>worldviewHTML(A,ctx,sk)},
@@ -1129,6 +1138,49 @@ async function runAgentAnalysis(sk,ctx){
     body.innerHTML=b.build();
     await sleep(200);
   }
+}
+
+/* ★ DNA 浓度 / 信号接线：把四槽的浓度权重 + 接线规则显性化（汇报核心）。
+   根据当前四槽是否有料动态点亮，不依赖 agent 真分析数据，永远可展示。 */
+function wiringHTML(sk,ctx){
+  const R=window.__REFS__||{ref:[],aes:[],ui:[]};
+  const c=ctx||{};
+  const hasChar = (R.ref&&R.ref.length>0) || c.hasCharRef;
+  const hasAes  = (R.aes&&R.aes.length>0) || c.hasGraphicRef;
+  const hasUi   = (R.ui&&R.ui.length>0)  || c.hasPlayRef;
+  const hasSkill= !!sk;
+  const skName  = sk ? (sk.name||sk.title||'风格技能') : '';
+  const dot=(on)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:${on?'var(--cta)':'var(--shell-txt-mute)'};box-shadow:${on?'0 0 6px var(--cta)':'none'}"></span>`;
+  const bar=(pct,col)=>`<span style="display:inline-block;height:6px;width:${pct}%;background:${col};border-radius:3px;vertical-align:middle"></span>`;
+  const row=(on,tag,tagcol,title,pct,barcol,desc)=>`
+    <div style="margin:9px 0;padding:9px 10px;border:1px solid var(--shell-line);border-radius:9px;background:${on?'rgba(61,232,74,.05)':'transparent'}">
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:5px">
+        ${dot(on)}<span style="font-weight:600;color:var(--shell-txt)">${title}</span>
+        <span class="wt-tag ${tagcol}" style="margin-left:auto">${tag}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+        <span style="flex:1;background:var(--shell-line);border-radius:3px;overflow:hidden;display:inline-flex">${bar(pct,barcol)}</span>
+        <code style="font-size:9px;color:var(--shell-txt-mute)">${pct}%</code>
+      </div>
+      <div style="font-size:9.5px;color:var(--shell-txt-mute);line-height:1.55">${desc}</div>
+    </div>`;
+  // 风格 DNA 浓度：选了技能则技能主导(高)，否则由②③分析长出
+  const stylePct = hasSkill?90:(hasAes?70:55);
+  const styleDesc = hasSkill
+    ? `已选「<b style="color:#d3a3ff">${skName}</b>」——风格 DNA 由技能主导（描边/材质/光影/色彩语言听技能）。<b>但技能只接风格，绝不接角色</b>：角色永远只认①。`
+    : `未选技能——风格纯从②调性 + ③玩法的分析里长出来。`;
+  let html=`<div style="font-size:9.5px;color:var(--shell-txt-mute);line-height:1.6;margin-bottom:6px">
+    四个信号源各走各线、不串台：<b>角色只跟①</b> · <b>风格由④技能(选了)＋②③分析共同决定</b> · <b>玩法只借③的骨架、视觉重造</b>。</div>`;
+  html+=row(hasChar,'硬锁 · 最高权重','hard','① 角色 & DNA',100,'#3DE84A',
+    '主角只认这张参考，图生图逐张锁人、不重设计、不洗风格。配色优先从①/界面提取 > 技能默认色板。');
+  html+=row(true,'顶高风格 DNA','style','④ 风格技能',stylePct,'#c878ff',styleDesc);
+  html+=row(hasAes,'调性 · 材质美学','tone','② 图形元素',hasAes?75:40,'#7aaaff',
+    '抽图形符号/造型/材质/设计美学，喂给「风格」这条线。'+(hasAes?'':' 当前缺省 → 从①角色兜底提取调性。'));
+  html+=row(hasUi,'只借骨架 · 视觉重造','skel','③ 玩法参考',hasUi?60:30,'#ffb45a',
+    '<b>只借交互结构/布局逻辑</b>；原图的符号、配色、装饰一律按①②④重新设计，<b>严禁照抄成一模一样</b>。'+(hasUi?'':' 未上传 → 用内置通用骨架。'));
+  html+=`<div style="margin-top:8px;font-size:9px;color:var(--shell-txt-mute);line-height:1.6;padding-top:8px;border-top:1px dashed var(--shell-line)">
+    出图时这套接线会落成三段式 prompt：<b>SLOT1 硬锁角色</b> / <b>SLOT2 风格听④＋②</b> / <b>SLOT3 只借③骨架＋列黑名单</b>，把「图生图复印」升级成「三信号源分析重组」。</div>`;
+  return html;
 }
 
 /* ① 品牌色彩系统：真取色 + 品牌化中文命名 + HEX + 用途（对标截图2/3） */
