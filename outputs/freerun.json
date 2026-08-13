@@ -1,60 +1,60 @@
 {
   "mode": "freerun",
-  "mascot": "狄瑞吉（次元裂隙）",
+  "mascot": "金克丝（诡术裂隙 · Arcane Rift）",
   "size": "portrait",
   "aspect": "9:16",
   "cells": {
-    "login": "rift_login.png",
-    "level": "rift_level.png",
-    "battle": "rift_battle.png",
-    "result": "rift_result.png",
-    "components": "rift_components.png",
-    "palette": "rift_components.png"
+    "login": "arcane_login.png",
+    "level": "arcane_level.png",
+    "battle": "arcane_battle.png",
+    "result": "arcane_result.png",
+    "components": "arcane_components.png",
+    "palette": "arcane_components.png"
   },
   "analysis": {
     "palette": {
-      "source": "从①角色 + ②DNF黑色瘟疫规范 + 成品界面真取色（登录页 + 组件表）",
+      "source": "从①角色（金克丝三视图立绘）+ ②风格DNA（王者/LOL青蓝科幻半写实UI）+ 成品界面真取色（登录页 + 组件表逐像素提取）",
       "groups": [
         {
           "type": "主色（背景基底）",
           "colors": [
-            {"name": "深渊紫黑", "hex": "#140B1E", "use": "背景基底/夜空腐化域，暗调压场约50%"},
-            {"name": "异界暗紫", "hex": "#2F144B", "use": "地形/面板/次级背景过渡"}
+            {"name": "深渊蓝黑", "hex": "#000010", "use": "夜空/废墟战场基底，暗调压场约50%"},
+            {"name": "深海靛蓝", "hex": "#001030", "use": "地形/面板/次级背景过渡"}
           ]
         },
         {
-          "type": "辅助色（异界撞色）",
+          "type": "辅助色（青蓝科幻撞色）",
           "colors": [
-            {"name": "裂隙品红", "hex": "#D90B56", "use": "标题/裂隙传送门/主CTA霓虹描边，约40%"},
-            {"name": "瘟疫紫红", "hex": "#B1168C", "use": "符文/技能图标/怪物，异界撞色"}
+            {"name": "科幻青蓝", "hex": "#3C78B4", "use": "符文环/路径流光/面板发光边，约35%"},
+            {"name": "海克斯亮青", "hex": "#3CA8C0", "use": "技能特效/暴击星爆/血蓝条辉光，异界撞色"}
           ]
         },
         {
           "type": "点睛色（≤10%）",
           "colors": [
-            {"name": "核心亮辉", "hex": "#F5C6FF", "use": "狄瑞吉发光核心/暴击特效/星爆，只在关键处点亮"}
+            {"name": "烫金浮雕", "hex": "#E4C084", "use": "主标题/星级/斜切金属倒角边框，只在关键处点睛"}
           ]
         }
       ]
     },
     "keywords": {
       "refs": [
-        {"label": "① 角色参考（狄瑞吉）", "features": ["发光菱形核心", "迸发紫/品红流动触手", "深紫非人形剪影", "异界魔物", "狰狞神秘深渊感"], "application": "硬锁角色：图生图逐张锁人，跨5张一致，不重设计、不变猫、不软萌化"},
-        {"label": "② 风格DNA（DNF黑色瘟疫规范）", "features": ["玫红品红#E91E63图形", "深紫黑底", "次元裂隙旋涡母题", "狄瑞吉复眼", "星爆曙光符文"], "application": "抽调性/材质/图形母题→翻成像素风，技能图标直接沿用规范里三个一级图标母题"},
-        {"label": "③ 玩法参考（极光幸存者骨架）", "features": ["登录三按钮+XP条", "关卡S路径节点+资源条", "战斗HUD血条+摇杆技能钮", "结算横幅+星级+奖励"], "application": "只借交互结构：极光青绿雪地猫的视觉全部剔除，重设计成深紫品红异界像素风"}
+        {"label": "① 角色参考（金克丝，HARD LOCK）", "features": ["冰蓝超长麻花辫", "黑十字抹胸", "青云纹身", "破洞紫红竖条纹裤", "缠绕护腕/马丁靴", "邪魅笑与叉腰姿态"], "application": "硬锁角色：图生图逐张锁人，跨5张一致，不重设计、不软萌化、不被青蓝DNA带偏发色"},
+        {"label": "② 风格DNA（王者/LOL青蓝科幻半写实UI）", "features": ["青蓝符文发光", "烫金浮雕标题", "斜切金属倒角六边形按钮", "深蓝黑废墟底", "painterly厚涂体积"], "application": "主导画风：图形母题/材质/配色全咬合graphic组，技能钮沿用六边形倒角面，0像素颗粒"},
+        {"label": "③ 玩法参考（符文之境闯关 + MOBA骨架）", "features": ["登录上标题环+中角色+下大按钮", "关卡S路径+六边形节点+星级", "战斗HUD小地图+摇杆+技能轮盘", "结算标题+星级+三奖励槽+确定"], "application": "只借交互结构：符文之境的像素视觉与MOBA原图具体贴图全部剔除，重设计成青蓝科幻半写实"}
       ],
-      "summary": "①角色只跟参考（狄瑞吉扛住不变猫）× ②DNF异界DNA翻像素 × ③只借极光幸存者骨架不照抄，三信号源拆开重组成《次元裂隙》——分析驱动，非图生图复印"
+      "summary": "①金克丝只跟参考（扛住不软萌、发色不漂）× ②王者/LOL青蓝科幻半写实DNA主导画风 × ③只借符文之境+MOBA骨架不照抄，三信号源拆开重组成《诡术裂隙》——分析驱动，非图生图复印"
     },
     "worldview": {
       "plans": [
         {
-          "name": "次元裂隙 · RIFT INVASION",
+          "name": "诡术裂隙 · ARCANE RIFT",
           "recommend": true,
-          "concept": "异界魔物狄瑞吉撕开次元裂隙、瘟疫蔓延侵蚀世界，玩家操控它逐层攻陷腐化疫区的roguelite闯关",
-          "visual": "深紫黑腐化异界 + 品红裂隙霓虹 + 像素颗粒 + 狄瑞吉发光核心与触手",
-          "symbol": "菱形发光核心 / 次元裂隙旋涡 / 品红符文",
-          "slogan": "撕裂次元，蔓延吧",
-          "values": ["深渊", "侵蚀", "异界", "史诗暗黑"]
+          "concept": "海克斯科技失控撕裂次元，金克丝携双子火炮闯入腐化的皮尔特沃夫废墟峡谷，逐层攻陷海克斯疫区的roguelite闯关",
+          "visual": "深蓝黑废墟异界 + 青蓝海克斯符文霓虹 + painterly半写实 + 金克丝冰蓝辫与双炮",
+          "symbol": "青蓝符文环 / 次元裂隙旋涡 / 烫金斜切倒角",
+          "slogan": "点燃裂隙，一路开花",
+          "values": ["失控", "科技朋克", "异界废墟", "史诗暗黑"]
         }
       ]
     }
