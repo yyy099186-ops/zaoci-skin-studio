@@ -1,60 +1,60 @@
 {
   "mode": "freerun",
-  "mascot": "金克丝（爆爆小岛）",
+  "mascot": "狄瑞吉（次元裂隙）",
   "size": "portrait",
   "aspect": "9:16",
   "cells": {
-    "login": "boom_login.png",
-    "level": "boom_level.png",
-    "battle": "boom_battle.png",
-    "result": "boom_result.png",
-    "components": "boom_components.png",
-    "palette": "boom_components.png"
+    "login": "rift_login.png",
+    "level": "rift_level.png",
+    "battle": "rift_battle.png",
+    "result": "rift_result.png",
+    "components": "rift_components.png",
+    "palette": "rift_components.png"
   },
   "analysis": {
     "palette": {
-      "source": "从①角色/成品界面真取色（登录页 + 组件表）",
+      "source": "从①角色 + ②DNF黑色瘟疫规范 + 成品界面真取色（登录页 + 组件表）",
       "groups": [
         {
           "type": "主色（背景基底）",
           "colors": [
-            {"name": "海岛天蓝", "hex": "#7CD5F5", "use": "背景天空/海面主色，明亮清爽基底约50%"},
-            {"name": "浅空薄雾蓝", "hex": "#BEEBFB", "use": "云朵/浅底/大面积留白过渡"}
+            {"name": "深渊紫黑", "hex": "#140B1E", "use": "背景基底/夜空腐化域，暗调压场约50%"},
+            {"name": "异界暗紫", "hex": "#2F144B", "use": "地形/面板/次级背景过渡"}
           ]
         },
         {
-          "type": "辅助色（撞色点缀）",
+          "type": "辅助色（异界撞色）",
           "colors": [
-            {"name": "薄荷糖绿", "hex": "#80E0D3", "use": "主按钮/关卡钮/land tile，主要CTA色约40%"},
-            {"name": "珊瑚橙", "hex": "#F97157", "use": "标题/次要按钮/CRIT特效，暖调撞色"}
+            {"name": "裂隙品红", "hex": "#D90B56", "use": "标题/裂隙传送门/主CTA霓虹描边，约40%"},
+            {"name": "瘟疫紫红", "hex": "#B1168C", "use": "符文/技能图标/怪物，异界撞色"}
           ]
         },
         {
           "type": "点睛色（≤10%）",
           "colors": [
-            {"name": "荧光黄绿", "hex": "#D4FF3F", "use": "星星/涂鸦/高光点缀，只在关键处用"}
+            {"name": "核心亮辉", "hex": "#F5C6FF", "use": "狄瑞吉发光核心/暴击特效/星爆，只在关键处点亮"}
           ]
         }
       ]
     },
     "keywords": {
       "refs": [
-        {"label": "① 角色参考（金克丝）", "features": ["蓝长单麻花辫", "黑十字抹胸+choker", "青云纹身", "破洞紫红竖条纹裤", "邪魅坏笑"], "application": "硬锁角色：图生图逐张锁人，5张全程同一人，不重设计不洗软萌"},
-        {"label": "④ 风格技能（街头可爱风）", "features": ["白底+天蓝薄荷撞色", "白贴纸描边", "chibi大眼", "halftone网点", "星星笑脸涂鸦"], "application": "顶高风格DNA：整套渲染听技能，像素颗粒/深蓝暗调0残留，只接风格不接角色"},
-        {"label": "③ 玩法参考（符文之境闯关骨架）", "features": ["登录：上标题/中角色/下按钮", "关卡：S形节点路径", "战斗：HP/MP+摇杆+技能钮", "结算：VICTORY+星级+奖励"], "application": "只借交互骨架：符文环/烫金字/蓝木按钮/夜山全部重设计，0视觉照抄"}
+        {"label": "① 角色参考（狄瑞吉）", "features": ["发光菱形核心", "迸发紫/品红流动触手", "深紫非人形剪影", "异界魔物", "狰狞神秘深渊感"], "application": "硬锁角色：图生图逐张锁人，跨5张一致，不重设计、不变猫、不软萌化"},
+        {"label": "② 风格DNA（DNF黑色瘟疫规范）", "features": ["玫红品红#E91E63图形", "深紫黑底", "次元裂隙旋涡母题", "狄瑞吉复眼", "星爆曙光符文"], "application": "抽调性/材质/图形母题→翻成像素风，技能图标直接沿用规范里三个一级图标母题"},
+        {"label": "③ 玩法参考（极光幸存者骨架）", "features": ["登录三按钮+XP条", "关卡S路径节点+资源条", "战斗HUD血条+摇杆技能钮", "结算横幅+星级+奖励"], "application": "只借交互结构：极光青绿雪地猫的视觉全部剔除，重设计成深紫品红异界像素风"}
       ],
-      "summary": "①角色只跟参考 × ④风格听技能 × ③只借骨架，三信号源拆开重组成《爆爆小岛》——分析驱动，非图生图复印"
+      "summary": "①角色只跟参考（狄瑞吉扛住不变猫）× ②DNF异界DNA翻像素 × ③只借极光幸存者骨架不照抄，三信号源拆开重组成《次元裂隙》——分析驱动，非图生图复印"
     },
     "worldview": {
       "plans": [
         {
-          "name": "爆爆小岛 BOOM ISLE",
+          "name": "次元裂隙 · RIFT INVASION",
           "recommend": true,
-          "concept": "暗黑朋克少女流落到一座糖果色海岛，用她的爆破天赋闯关夺宝——反差萌世界观：硬核角色 × 治愈海岛",
-          "visual": "天蓝海面糖果岛 + 薄荷珊瑚撞色 + 白贴纸描边 chibi + 星星涂鸦",
-          "symbol": "爆破 = 打破常规的少女能量；海岛 = 从战场暂离的度假冒险",
-          "slogan": "炸出一片新天地",
-          "values": ["反差萌", "清爽治愈", "潮酷不失可爱"]
+          "concept": "异界魔物狄瑞吉撕开次元裂隙、瘟疫蔓延侵蚀世界，玩家操控它逐层攻陷腐化疫区的roguelite闯关",
+          "visual": "深紫黑腐化异界 + 品红裂隙霓虹 + 像素颗粒 + 狄瑞吉发光核心与触手",
+          "symbol": "菱形发光核心 / 次元裂隙旋涡 / 品红符文",
+          "slogan": "撕裂次元，蔓延吧",
+          "values": ["深渊", "侵蚀", "异界", "史诗暗黑"]
         }
       ]
     }
